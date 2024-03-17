@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}Rent Now{% endblock %}
+{% block content %}
+    <div class="container">
+        <p class="mt-5 pt-5">Product Name:
+            <strong class="text-primary">{{ product.name|title }}</strong>
+        </p>
+        <div class="col-3 p-3">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form method="post" class="form-group">
+                {% csrf_token %}
+                {{ form | crispy }}
+                <p class="text-danger">* Delivery charge may apply</p>
+                <input type="submit" class="btn btn-success" value="Rent Now"/>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}Edit Profile {% endblock %}
+{%block content %}
+<div class="col-sm-7 p-3">
+    <form method="post" class="form-group">
+        {% csrf_token %} {{form | crispy}}
+
+        <input type="submit" class="btn btn-success" value="Update" />
+    </form>
+</div>
+
+{% endblock %}

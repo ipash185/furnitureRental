@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Profile {% endblock %}
+{%block content %}
+
+<div class="card mt-5">
+    <div class="card-header d-flex justify-content-between">
+        <div class="badge bg-primary text-wrap fs-5">
+            Profile
+        </div>
+
+        <a href=" {%  url 'edit-profile' %} " class="btn btn-danger">Edit Profile</a>
+
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item p-3">
+
+            <strong>Name</strong>
+            <p>
+                <strong>
+                    {{name}}
+                </strong>
+            </p>
+
+        </li>
+        <li class="list-group-item p-3">
+
+            <strong>Username</strong>
+            <p>
+                <strong>
+                    {{username}}
+                </strong>
+            </p>
+
+        </li>
+        <li class="list-group-item p-3">
+
+            <strong>Email Address</strong>
+            <p>
+                <strong>
+                    {{email}}
+                </strong>
+            </p>
+
+        </li>
+    </ul>
+</div>
+<div class="card mt-5 mb-5">
+    <div class="card-header d-flex justify-content-between">
+        <div class="badge bg-primary text-wrap fs-5">
+            Delivery Address
+        </div>
+
+        <div class="">
+            {% if address %}
+            <a href="{% url 'edit-billing-address' %}" class="btn btn-primary">Edit Billing Address</a>
+            {% else%}
+            <a href="{% url 'billing-address' %}" class="btn btn-primary">Add Billing Address</a>
+            {% endif %}
+        </div>
+
+    </div>
+    <li class="list-group-item p-3">
+
+        <strong>Phone</strong>
+        <p>
+            <strong>
+                {{phone}}
+            </strong>
+        </p>
+
+    </li>
+    <li class="list-group-item p-3">
+
+        <strong>Delivery Address</strong>
+        <p>
+            <strong>
+                <address>{{address}}</address>
+            </strong>
+        </p>
+
+    </li>
+
+</div>
+
+<li class="list-group-item p-3">
+    <a href=" {%  url 'change-password' %} " class="btn btn-primary">Change Password</a>
+</li>
+
+{% endblock %}

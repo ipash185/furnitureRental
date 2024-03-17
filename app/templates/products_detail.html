@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block title %}Furniture Rental: {{ product.name }}{% endblock %}
+{% block content %}
+    <div class="d-flex">
+        <div class="col-md-10 mt-3 mb-5">
+            <div class="d-flex">
+                <div class="col-md-6">
+                    <img src="{{ product.image.url }}" width="700" height="500" alt="{{ product.name }}"
+                         class="img-fluid p-3">
+                </div>
+                <div class="col-md-6 p-3">
+                    <h4>{{ product.name.title }}</h4>
+                    <p><span class="badge bg-primary mt-1">{{ product.brand }}</span></p>
+
+                    <h3 class="text-warning mt-5">Rs: {{ product.price }} per day.</h3>
+
+                    <div class="mt-4 mb-4">
+                        {% if product.available %}
+                            <a href="{% url 'rent' product.pk %}" class="btn btn-primary">Rent Now</a>
+                        {% else %}
+                            <p class="text-danger">Out of stock</p>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            {{ product.description|linebreaks }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h3 class="text-center text-danger">Leave a Comments</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="form-group mb-5">
+                        {% csrf_token %} {{ form | crispy }}
+
+                        <input type="submit" class="btn btn-success" value="Comment"/>
+                    </form>
+
+                </div>
+            </div>
+            <div class="card mt-4 mb-4">
+                <div class="card-header">
+                    <h3 class="text-center text-danger"> {{ comments.count }} Comments</h3>
+                </div>
+                <div class="card-body">
+
+                    {% for comment in comments %}
+                        <div class="card m-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <strong>{{ comment.user.first_name }} {{ comment.user.last_name }}</strong>
+                                    {% if comment.user == request.user %}
+                                        <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-danger">Delete</a>
+                                    {% endif %}
+                                </div>
+                                <p>{{ comment.comment }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md mt-3">
+            <h4 class="text-center">You may also like</h4>
+            {% for product in all_products %}
+                <div class="card m-2" style="width: 20rem;">
+                    <a href="{% url 'product_detail' product.pk %}" class="m-3 p-1 text-decoration-none text-black">
+                        <img src="{{ product.image.url }}" class="card-img-top" width="200" height="200"
+                             alt="{{ product.image }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name|truncatechars:'90' }}</h5>
+                            <p class="card-text">
+                                <span class="badge bg-danger">Price {{ product.price }} per day</span>
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

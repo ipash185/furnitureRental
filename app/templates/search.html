@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="d-flex">
+       <div class="col-md">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h4>Search Result for '{{ query }}'</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                    {% if products %}
+                        {% for product in products %}
+                            <div class="card m-2" style="width: 20rem;">
+                                <a href="{% url 'product_detail' product.pk %}"
+                                   class="m-3 p-1 text-decoration-none text-black">
+                                    <img src="{{ product.image.url }}" class="card-img-top" width="200" height="200"
+                                         alt="{{ product.image }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ product.name|truncatechars:'90' }}</h5>
+                                        <p class="card-text">
+                                            <span class="badge bg-danger">Price {{ product.price }} per day</span>
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-md">
+                            <h3 class="text-center">No Result Found!</h3>
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

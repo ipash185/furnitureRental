@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex mt-3">
+    <div class="col-md-1">
+        <div class="card">
+            <div class="card-header">
+                <a href="{% url 'dashboard' %}" class="text-decoration-none">
+                    <h4>Dashboard</h4>
+                </a>
+            </div>
+
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="{% url 'add_product' %}" class="text-decoration-none">Add Product</a></li>
+                    <li class="list-group-item"><a href="{% url 'pending_rent_requests' %}" class="text-decoration-none">Rent Request</a></li>
+                    <li class="list-group-item"><a href="{% url 'delivery_rented_products' %}" class="text-decoration-none">Rent Delivery</a></li>
+                    <li class="list-group-item"><a href="{% url 'rented_products' %}" class="text-decoration-none">Rented Products</a></li>
+                    <li class="list-group-item"><a href="{% url 'all_rent_return_requests' %}" class="text-decoration-none">Furniture PickUp</a></li>
+                    <li class="list-group-item"><a href="{% url 'return_product' %}" class="text-decoration-none">Return Delivery</a></li>
+                    <li class="list-group-item"><a href="{% url 'all_rent' %}" class="text-decoration-none">All Activities</a></li>
+
+                </ul>
+
+        </div>
+    </div>
+    <div class="col-md">
+        <div class="card">
+            <div class="card-header">
+                <h4>
+                    {% block db_title %}{% endblock %}
+                </h4>
+            </div>
+            <div class="card-body">
+                {% block db_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

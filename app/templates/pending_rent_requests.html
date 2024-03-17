@@ -1,0 +1,72 @@
+{% extends 'db_base.html' %}
+{% block db_title %}Rent Request{% endblock %}
+{% block db_content %}
+    <div class="card">
+        <div class="card-header">
+            <h4>Rent Request</h4>
+        </div>
+        <div class="card-body">
+        {% if rent_request %}
+            {% for rent in rent_request %}
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne">
+                                <img src="{{ rent.product.image.url }}" class="rounded" height="100" width="100"
+                                     alt="{{ rent.product.name }}">
+                                <h5 class="p-3">{{ rent.product.name|title }}</h5>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingOne"
+                             data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Customer Name</th>
+                                        <th scope="col">Customer Phone</th>
+                                        <th scope="col">Customer Email</th>
+                                        <th scope="col">Customer Address</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Rent From</th>
+                                        <th scope="col">Rent To</th>
+                                        <th scope="col">Total Day</th>
+                                        <th scope="col">Total Price</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ rent.user.first_name}} {{ rent.user.last_name }}</td>
+                                        <td>{{ rent.user.userinformation.phone }}</td>
+                                        <td>{{ rent.user.email }}</td>
+                                        <td>{{ rent.user.userinformation.delivery_address }}</td>
+                                        <td>{{ rent.quantity }}</td>
+                                        <td>{{ rent.start_date }}</td>
+                                        <td>{{ rent.end_date }}</td>
+                                        <td>{{ rent.rental_day }}</td>
+                                        <td>{{ rent.total_price }}</td>
+                                        <td>{{ rent.status }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="card-footer">
+                                    <a href="{% url 'accepted_rent_requests' rent.pk %}" class="btn btn-success">Accept</a>
+                                    <a href="{% url 'rejected_rent_requests' rent.pk %}" class="btn btn-danger">Reject</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+        <div class="alert alert-info">
+            <strong>Info!</strong> No Rent Request Found.
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
