@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from app.forms import ProductForm
 from app.models import Product, Rent
 
+from decimal import Decimal
 
 @login_required(login_url='/login/')
 @staff_member_required()
@@ -85,6 +86,8 @@ def accept_rent_request(request, rent_id):
 def reject_rent_request(request, rent_id):
     rent = Rent.objects.get(id=rent_id)
     rent.status = 'rejected'
+    rent.product.quantity += rent.quantity
+    rent.product.save()
     rent.save()
     return redirect('pending_rent_requests')
 
@@ -125,8 +128,11 @@ def rented_products(request):
 def accept_return_request(request, rent_id):
     rent = Rent.objects.get(id=rent_id)
     rent.is_returned = True
+    rent.product.quantity += rent.quantity
+    rent.product.price -= rent.product.price * Decimal(0.1)
+    rent.product.save()
     rent.save()
-    return redirect('return_request')
+    return redirect('dashboard')
 
 
 @login_required(login_url='login')
