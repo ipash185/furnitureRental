@@ -10,18 +10,22 @@ from django.template.loader import get_template
 from app.decorators import user_information_required
 from app.forms import RentForm
 from app.forms.comment import CommentForm
-from app.models import Product, Rent, Comment
+from app.models import Product, Rent, Comment, Profit
 from io import BytesIO
 from xhtml2pdf import pisa
+
+from decimal import Decimal
 
 
 def home(request):
     products = Product.objects.filter(available=True).order_by('?')
     new_products = Product.objects.filter(available=True).order_by('created_at')[:5]
+    
     context = {
         'products': products,
         'new_products': new_products
     }
+    
     return render(request, 'index.html', context)
 
 
@@ -101,6 +105,13 @@ def product_damaged(request, rent_id):
     rents = Rent.objects.get(id=rent_id)
     rents.status = 'damaged'
     rents.product.available = False
+    rents.product.duration += max(rents.rental_day, int((date.today() - rents.start_date).days))
+    
+    cost = rents.product.investment * Decimal(0.1) * Decimal(rents.product.duration / 365)
+    ref = Profit.objects.first()
+    ref.investment -= cost
+    
+    ref.save()
     rents.save()
     return redirect('my_rent_products')
 

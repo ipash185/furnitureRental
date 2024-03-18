@@ -31,5 +31,7 @@ class RentForm(forms.ModelForm):
             self.errors['start_date'] = self.error_class(['Rent Start Date cannot be Today or Previous Day'])
         elif end_date == start_date or end_date <= start_date:
             self.errors['end_date'] = self.error_class(['Rent End Date cannot be Rent start date'])
+        elif int((end_date - start_date).days) > 365 * 2:
+            self.errors['end_date'] = self.error_class(['Duration cannot be more than 2 years'])
 
         return self.cleaned_data
