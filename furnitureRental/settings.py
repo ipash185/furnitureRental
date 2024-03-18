@@ -29,7 +29,9 @@ SECRET_KEY = "123"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["loalhost", "laptop-legion"]
+ALLOWED_HOSTS = ["loalhost", "laptop-legion", "laptop-legion.tail25c21.ts.net"]
+
+CSRF_TRUSTED_ORIGINS = ["https://laptop-legion.tail25c21.ts.net"]
 
 
 # Application definition

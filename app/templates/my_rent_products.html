@@ -41,8 +41,10 @@
                                 {% if rent.status == 'pending' %}
                                     <a href="{% url 'cancel_rent' rent.pk %}" class="btn btn-danger">Cancel</a>
                                 {% elif rent.status == 'rejected' %}
-                                    <a href="{% url 'product_detail' rent.product.pk %}" class="btn btn-primary">Rent
+                                    <a href="{% url 'product_detail' rent.product.pk %}" class="btn btn-primary">Try
                                         Again</a>
+                                {% elif rent.status == 'damaged' %}
+                                    <p>damaged</p>
                                 {% else %}
                                     {% if rent.is_rented %}
                                         {% if rent.status == 'returned' %}
@@ -55,6 +57,8 @@
                                         {% else %}
                                             <a href="{% url 'return_request' rent.pk %}"
                                                class="btn btn-success">Return</a>
+                                            <a href="{% url 'product_damaged' rent.pk %}"
+                                               class="btn btn-success">Product Damaged</a>
                                             <a href="{% url 'billing' rent.pk %}"
                                                class="btn btn-info" target="_blank">Bill</a>
                                         {% endif %}

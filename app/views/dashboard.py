@@ -2,9 +2,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from datetime import date
+
 from app.forms import ProductForm
 from app.models import Product, Rent
 
+from decimal import Decimal
 
 @login_required(login_url='/login/')
 @staff_member_required()
@@ -85,6 +88,8 @@ def accept_rent_request(request, rent_id):
 def reject_rent_request(request, rent_id):
     rent = Rent.objects.get(id=rent_id)
     rent.status = 'rejected'
+    rent.product.available = True
+    rent.product.save()
     rent.save()
     return redirect('pending_rent_requests')
 
@@ -125,8 +130,15 @@ def rented_products(request):
 def accept_return_request(request, rent_id):
     rent = Rent.objects.get(id=rent_id)
     rent.is_returned = True
+    rent.product.duration += max(rent.rental_day, int((date.today() - rent.start_date).days))
+    
+    if rent.product.duration > 365:
+        rent.product.price -= rent.product.price * Decimal(0.1)
+    
+    rent.product.available = True
+    rent.product.save()
     rent.save()
-    return redirect('return_request')
+    return redirect('dashboard')
 
 
 @login_required(login_url='login')

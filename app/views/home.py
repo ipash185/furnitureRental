@@ -16,8 +16,8 @@ from xhtml2pdf import pisa
 
 
 def home(request):
-    products = Product.objects.all().order_by('?')
-    new_products = Product.objects.all().order_by('created_at')[:5]
+    products = Product.objects.filter(available=True).order_by('?')
+    new_products = Product.objects.filter(available=True).order_by('created_at')[:5]
     context = {
         'products': products,
         'new_products': new_products
@@ -27,7 +27,7 @@ def home(request):
 
 def products_detail(request, product_id):
     product = Product.objects.get(id=product_id)
-    all_products = Product.objects.all().order_by('?')[:5]
+    all_products = Product.objects.filter(available=True).order_by('?')[:5]
     comments = Comment.objects.filter(product=product_id)
 
     if request.method == 'POST':
@@ -59,7 +59,9 @@ def rent(request, product_id):
         if form.is_valid():
             rents = form.save(commit=False)
             rents.rental_day = int((rents.end_date - rents.start_date).days)
-            rents.total_price = rents.rental_day * request_product.price * rents.quantity
+            rents.total_price = rents.rental_day * request_product.price
+            request_product.available = False
+            request_product.save()
             rents.save()
             return redirect('index')
         else:
@@ -94,6 +96,13 @@ def return_request(request, rent_id):
     rents.save()
     return redirect('my_rent_products')
 
+@login_required(login_url='login')
+def product_damaged(request, rent_id):
+    rents = Rent.objects.get(id=rent_id)
+    rents.status = 'damaged'
+    rents.product.available = False
+    rents.save()
+    return redirect('my_rent_products')
 
 def search(request):
     query = request.GET.get('query')
@@ -119,7 +128,7 @@ def delete_comment(request, comment_id):
 @login_required(login_url='login')
 def billing(request, product_id):
     rent_prod = Rent.objects.get(id=product_id)
-    price = rent_prod.product.price * rent_prod.quantity
+    price = rent_prod.total_price
     context = {
         'rent': rent_prod,
         'price': price,
