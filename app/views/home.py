@@ -96,6 +96,13 @@ def return_request(request, rent_id):
     rents.save()
     return redirect('my_rent_products')
 
+@login_required(login_url='login')
+def product_damaged(request, rent_id):
+    rents = Rent.objects.get(id=rent_id)
+    rents.status = 'damaged'
+    rents.product.available = False
+    rents.save()
+    return redirect('my_rent_products')
 
 def search(request):
     query = request.GET.get('query')

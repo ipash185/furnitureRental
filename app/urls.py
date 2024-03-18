@@ -10,6 +10,7 @@ urlpatterns = [
     path('home/rent/<int:product_id>/', views.rent, name='rent'),
     path('home/rent/my-rent-products/', views.my_rent_products, name='my_rent_products'),
     path('home/rent/my-rent-products/cancel-product/<int:rent_id>/', views.cancel_rent, name='cancel_rent'),
+    path('home/rent/my-rent-products/product-damaged/<int:rent_id>/', views.product_damaged, name='product_damaged'),
     path('dashboard/rent/all/rented-products/return/request/<int:rent_id>/', views.return_request,
          name='return_request'),
     path('home/search/', views.search, name='search'),
