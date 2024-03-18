@@ -60,6 +60,8 @@ def rent(request, product_id):
             rents = form.save(commit=False)
             rents.rental_day = int((rents.end_date - rents.start_date).days)
             rents.total_price = rents.rental_day * request_product.price * rents.quantity
+            request_product.quantity -= rents.quantity
+            request_product.save()
             rents.save()
             return redirect('index')
         else:
