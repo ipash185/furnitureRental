@@ -19,7 +19,7 @@ class RentForm(forms.ModelForm):
 
     class Meta:
         model = Rent
-        fields = ['user', 'product', 'quantity', 'start_date', 'end_date',
+        fields = ['user', 'product', 'start_date', 'end_date',
                   'status', 'rental_day', 'total_price', 'is_returned']
 
     def clean(self):
@@ -27,12 +27,9 @@ class RentForm(forms.ModelForm):
         start_date = self.cleaned_data.get('start_date')
         end_date = self.cleaned_data.get('end_date')
         qty = self.cleaned_data.get('quantity')
-        max_qty = self.cleaned_data.get('product').quantity
         if start_date <= date.today() or start_date == date.today():
             self.errors['start_date'] = self.error_class(['Rent Start Date cannot be Today or Previous Day'])
         elif end_date == start_date or end_date <= start_date:
             self.errors['end_date'] = self.error_class(['Rent End Date cannot be Rent start date'])
-        elif qty < 1 or qty > max_qty:
-            self.errors['quantity'] = self.error_class(['Invalid Quantity'])
 
         return self.cleaned_data

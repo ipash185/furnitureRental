@@ -15,14 +15,10 @@
                     <p><span class="badge bg-primary mt-1">{{ product.brand }}</span></p>
 
                     <h3 class="text-warning mt-5">Rs: {{ product.price }} per day.</h3>
-                    <h4 class="text-warning mt-4">{{ product.quantity }} available</h4>
 
                     <div class="mt-4 mb-4">
-                        {% if product.available %}
-                            <a href="{% url 'rent' product.pk %}" class="btn btn-primary">Rent Now</a>
-                        {% else %}
-                            <p class="text-danger">Out of stock</p>
-                        {% endif %}
+                
+                        <a href="{% url 'rent' product.pk %}" class="btn btn-primary">Rent Now</a>
 
                     </div>
 

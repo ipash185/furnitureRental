@@ -10,10 +10,10 @@ class Rent(models.Model):
         rented = 'rented', 'Rented'
         rejected = 'rejected', 'Rejected'
         returned = 'returned', 'Returned'
+        damaged = 'damaged', 'Damaged'
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
     start_date = models.DateField()
     end_date = models.DateField()
     rental_day = models.IntegerField(default=0)

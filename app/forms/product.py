@@ -10,7 +10,6 @@ class ProductForm(forms.ModelForm):
             'name',
             'description',
             'price',
-            'quantity',
             'brand',
             'image',
             'available',
