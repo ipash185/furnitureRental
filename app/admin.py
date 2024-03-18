@@ -4,7 +4,7 @@ from app.models.rent import Rent
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'brand', 'category', 'available')
+    list_display = ('name', 'price', 'investment', 'brand', 'category', 'available')
     list_filter = ('available', 'brand', 'created_at', 'updated_at')
     search_fields = ['name', 'brand']
 

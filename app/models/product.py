@@ -15,6 +15,7 @@ class Product(models.Model):
     description = models.TextField(null=False, blank=False)
     brand = models.CharField(max_length=200, null=False, blank=False, default="No Brand")
     price = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False)
+    investment = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=False, blank=False)
     category = models.CharField(max_length=10, choices=Categories.choices, default=Categories.none)
     image = models.ImageField(upload_to='product_image/%y/%m/%d', null=False, blank=False)
     available = models.BooleanField(default=True)

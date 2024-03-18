@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from datetime import date
 
 from app.forms import ProductForm
-from app.models import Product, Rent
+from app.models import Product, Rent, Profit
 
 from decimal import Decimal
 
@@ -13,7 +13,15 @@ from decimal import Decimal
 @staff_member_required()
 def dashboard(request):
     product = Product.objects.all()
-    return render(request, 'db_index.html', {"product": product})
+    
+    if Profit.objects.count() == 0:
+        Profit.objects.create(investment=0, revenue = 0)
+    
+    ref = Profit.objects.first()
+    investment = ref.investment
+    revenue = ref.revenue
+    
+    return render(request, 'db_index.html', {"product": product, "investment": investment, "revenue": revenue})
 
 
 @login_required(login_url='/login/')
@@ -22,6 +30,11 @@ def add_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)  # request.FILES is for image
         if form.is_valid():
+            
+            new_investment = Profit.objects.all().first()
+            new_investment.investment += form.cleaned_data['investment']
+            new_investment.save()
+            
             form.save()
             return redirect('dashboard')
 
@@ -130,7 +143,15 @@ def rented_products(request):
 def accept_return_request(request, rent_id):
     rent = Rent.objects.get(id=rent_id)
     rent.is_returned = True
-    rent.product.duration += max(rent.rental_day, int((date.today() - rent.start_date).days))
+    
+    time_used = max(rent.rental_day, int((date.today() - rent.start_date).days))
+    
+    rent.product.duration += time_used
+    rent.total_price = rent.product.price * time_used
+    
+    ref = Profit.objects.first()
+    ref.revenue += rent.total_price
+    ref.save()
     
     if rent.product.duration > 365:
         rent.product.price -= rent.product.price * Decimal(0.1)
