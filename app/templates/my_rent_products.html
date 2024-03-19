@@ -2,35 +2,34 @@
 {% block title %}My Rent Products{% endblock %}
 {% block content %}
 
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
-            <h1>My Rent Activities</h1>
+        <div class="col-12">
+            <h1 class="text-center mt-4">My Rent Activities</h1>
             <hr>
             {% if rents %}
+            <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Product</th>
-                        <th>Price (per hours)</th>
-                        <th>Quantity</th>
-                        <th>Brand</th>
-                        <th>Rental From</th>
-                        <th>Rental To</th>
-                        <th>Total Rental Day</th>
-                        <th>Total Rental Price</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
+                        <tr>
+                            <th scope="col">Image</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Price (per hour)</th>
+                            <th scope="col">Brand</th>
+                            <th scope="col">Rental From</th>
+                            <th scope="col">Rental To</th>
+                            <th scope="col">Total Rental Day</th>
+                            <th scope="col">Total Rental Price</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {% for rent in rents %}
+                        {% for rent in rents %}
                         <tr>
-                            <td><img src="{{ rent.product.image.url }}" alt="{{ rent.product.name }}" width="100"
-                                     height="100"></td>
+                            <td><img src="{{ rent.product.image.url }}" alt="{{ rent.product.name }}" class="img-fluid" style="max-width: 100px;"></td>
                             <td>{{ rent.product.name }}</td>
                             <td>{{ rent.product.price }}</td>
-                            <td>{{ rent.quantity }}</td>
                             <td>{{ rent.product.brand }}</td>
                             <td>{{ rent.start_date }}</td>
                             <td>{{ rent.end_date }}</td>
@@ -39,44 +38,41 @@
                             <td>{{ rent.status }}</td>
                             <td>
                                 {% if rent.status == 'pending' %}
-                                    <a href="{% url 'cancel_rent' rent.pk %}" class="btn btn-danger">Cancel</a>
+                                <a href="{% url 'cancel_rent' rent.pk %}" class="btn btn-danger">Cancel</a>
                                 {% elif rent.status == 'rejected' %}
-                                    <a href="{% url 'product_detail' rent.product.pk %}" class="btn btn-primary">Try
-                                        Again</a>
+                                <a href="{% url 'product_detail' rent.product.pk %}" class="btn btn-primary">Try Again</a>
                                 {% elif rent.status == 'damaged' %}
-                                    <p>damaged</p>
+                                <p>damaged</p>
                                 {% else %}
-                                    {% if rent.is_rented %}
-                                        {% if rent.status == 'returned' %}
-                                            {% if rent.is_returned %}
-                                                <a href="{% url 'billing' rent.pk %}"
-                                                   class="btn btn-info" target="_blank">Bill</a>
-                                            {% else %}
-                                                <p class="text-center text-primary">Waiting for Pick up</p>
-                                            {% endif %}
-                                        {% else %}
-                                            <a href="{% url 'return_request' rent.pk %}"
-                                               class="btn btn-success">Return</a>
-                                            <a href="{% url 'product_damaged' rent.pk %}"
-                                               class="btn btn-danger">Product Damaged</a>
-                                            <a href="{% url 'billing' rent.pk %}"
-                                               class="btn btn-info" target="_blank">Bill</a>
-                                        {% endif %}
-                                    {% else %}
-                                        <p class="text-center text-info">Waiting for delivery</p>
-                                    {% endif %}
+                                {% if rent.is_rented %}
+                                {% if rent.status == 'returned' %}
+                                {% if rent.is_returned %}
+                                <a href="{% url 'billing' rent.pk %}" class="btn btn-info" target="_blank">Bill</a>
+                                {% else %}
+                                <p class="text-center text-primary">Waiting for Pick up</p>
+                                {% endif %}
+                                {% else %}
+                                <a href="{% url 'return_request' rent.pk %}" class="btn btn-success">Return</a>
+                                <a href="{% url 'product_damaged' rent.pk %}" class="btn btn-danger">Product Damaged</a>
+                                <a href="{% url 'billing' rent.pk %}" class="btn btn-info" target="_blank">Bill</a>
+                                {% endif %}
+                                {% else %}
+                                <p class="text-center text-info">Waiting for delivery</p>
+                                {% endif %}
                                 {% endif %}
                             </td>
-
                         </tr>
-                    {% endfor %}
+                        {% endfor %}
                     </tbody>
                 </table>
+            </div>
             {% else %}
-                <div class="text-center">
-                    <h4>No Activities</h4>
-                </div>
+            <div class="text-center">
+                <h4>No Activities</h4>
+            </div>
             {% endif %}
         </div>
     </div>
+</div>
+
 {% endblock %}

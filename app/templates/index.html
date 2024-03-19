@@ -2,59 +2,63 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <div class="d-flex">
-
-        <div class="col-md">
-
-            <div class="card mt-5">
-                <div class="card-header">
-                    <h4>New Furniture's in Store</h4>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mt-5 border-0 shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">New Furniture's in Store</h4>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
                         {% for product in new_products %}
-                            <div class="card m-2" style="width: 20rem;">
+                        <div class="col">
+                            <div class="card border-0">
                                 <a href="{% url 'product_detail' product.pk %}"
-                                   class="m-3 p-1 text-decoration-none text-black">
-                                    <img src="{{ product.image.url }}" class="card-img-top" width="200" height="200"
-                                         alt="{{ product.image }}">
+                                    class="text-decoration-none text-dark">
+                                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.image }}">
                                     <div class="card-body">
-                                        <h5 class="card-title">{{ product.name|truncatechars:'90' }}</h5>
+                                        <h5 class="card-title fw-bold">{{ product.name|truncatechars:'90' }}</h5>
                                         <p class="card-text">
-                                            <span class="badge bg-danger">Price {{ product.price }} per day</span>
+                                            <span class="badge bg-danger">Price: {{ product.price }} per day</span>
                                         </p>
                                     </div>
                                 </a>
                             </div>
+                        </div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h4>All Furniture's in Store</h4>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card mt-5 border-0 shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">All Furniture's in Store</h4>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
                         {% for product in products %}
-                            <div class="card m-2" style="width: 20rem;">
+                        <div class="col">
+                            <div class="card border-0">
                                 <a href="{% url 'product_detail' product.pk %}"
-                                   class="m-3 p-1 text-decoration-none text-black">
-                                    <img src="{{ product.image.url }}" class="card-img-top" width="200" height="200"
-                                         alt="{{ product.image }}">
+                                    class="text-decoration-none text-dark">
+                                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.image }}">
                                     <div class="card-body">
-                                        <h5 class="card-title">{{ product.name|truncatechars:'90' }}</h5>
+                                        <h5 class="card-title fw-bold">{{ product.name|truncatechars:'90' }}</h5>
                                         <p class="card-text">
-                                            <span class="badge bg-danger">Price {{ product.price }} per day</span>
+                                            <span class="badge bg-danger">Price: {{ product.price }} per day</span>
                                         </p>
                                     </div>
                                 </a>
                             </div>
+                        </div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+</div>
 {% endblock %}

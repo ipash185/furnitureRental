@@ -3,6 +3,14 @@
     Dashboard
 {% endblock %}
 {% block db_content %}
+
+    <div class="d-flex justify-content-between">
+        <div>
+            <p>Investment: {{ investment }}</p>
+            <p>Revenue: {{ revenue }}</p>
+        </div>
+    </div>
+
     <div class="row">
         {% for product in product %}
 
@@ -37,10 +45,6 @@
             </div>
         </div>
     {% endfor %}
-    </div>
-    <div>
-        <p>Investment: {{ investment }}</p>
-        <p>Revenue: {{ revenue }}</p>
     </div>
 
 {% endblock %}

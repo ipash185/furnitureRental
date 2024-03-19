@@ -2,26 +2,29 @@
 {% load crispy_forms_filters %}
 {% block title %}Rent Now{% endblock %}
 {% block content %}
-    <div class="container">
-        <p class="mt-5 pt-5">Product Name:
-            <strong class="text-primary">{{ product.name|title }}</strong>
-        </p>
-        <div class="col-3 p-3">
+<div class="container">
+    <div class="row justify-content-center mt-5 pt-5">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <p class="mb-4">Product Name:
+                <strong class="text-primary">{{ product.name|title }}</strong>
+            </p>
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 {% endfor %}
             {% endif %}
-            <form method="post" class="form-group">
-                {% csrf_token %}
-                {{ form | crispy }}
-                <p class="text-danger">* Delivery charge may apply</p>
-                <input type="submit" class="btn btn-success" value="Rent Now"/>
-            </form>
+            <div class="col-md-8 offset-md-2 p-3">
+                <form method="post" class="form-group">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <p class="text-danger">* Delivery charge may apply</p>
+                    <input type="submit" class="btn btn-success w-100" value="Rent Now"/>
+                </form>
+            </div>
         </div>
-
     </div>
+</div>
 {% endblock %}
