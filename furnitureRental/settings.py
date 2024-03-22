@@ -31,7 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "laptop-legion.tail25c21.ts.net", "trailblazers.tail25c21.ts.net", "furniturerental.store"]
 
-CSRF_TRUSTED_ORIGINS = ["https://laptop-legion.tail25c21.ts.net", "https://trailblazers.tail25c21.ts.net"]
+CSRF_TRUSTED_ORIGINS = ["https://laptop-legion.tail25c21.ts.net", "https://trailblazers.tail25c21.ts.net", "https://furniturerental.store"] 
 
 
 # Application definition
