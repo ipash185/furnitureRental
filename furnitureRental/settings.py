@@ -29,7 +29,7 @@ SECRET_KEY = "123"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "laptop-legion", "laptop-legion.tail25c21.ts.net", "trailblazers.tail25c21.ts.net"]
+ALLOWED_HOSTS = ["localhost", "laptop-legion.tail25c21.ts.net", "trailblazers.tail25c21.ts.net", "furniturerental.store"]
 
 CSRF_TRUSTED_ORIGINS = ["https://laptop-legion.tail25c21.ts.net", "https://trailblazers.tail25c21.ts.net"]
 
