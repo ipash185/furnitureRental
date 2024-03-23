@@ -29,7 +29,7 @@ SECRET_KEY = "123"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["loalhost", "laptop-legion", "laptop-legion.tail25c21.ts.net"]
+ALLOWED_HOSTS = ["127.0.0.1","localhost", "laptop-legion", "laptop-legion.tail25c21.ts.net"]
 
 CSRF_TRUSTED_ORIGINS = ["https://laptop-legion.tail25c21.ts.net"]
 
@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'newDB',
         'USER': 'postgres',
-        'PASSWORD': '0911',
+        'PASSWORD': 'Annie_12',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -146,6 +146,6 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static')
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]

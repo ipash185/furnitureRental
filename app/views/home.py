@@ -159,3 +159,6 @@ def render_to_pdf(template_src, context_dict=None):
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
+
+def virtual(request):
+    return render(request, 'virtual.html')

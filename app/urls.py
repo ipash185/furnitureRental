@@ -35,6 +35,7 @@ urlpatterns = [
     path('dashboard/rent/all/rented-products/return/request/', views.all_rent_request, name='all_rent_return_requests'),
     path('dashboard/rent/all/rented-products/return/', views.return_product, name='return_product'),
     path('dashboard/rent/all/', views.activity, name='all_rent'),
+    path('home/virtual/', views.virtual, name='virtual'),
 
 ]
 urlpatterns += staticfiles_urlpatterns()
