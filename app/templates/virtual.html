@@ -5,108 +5,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Cube</title>
+    <title>Virtual Room</title>
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
+        .flexbox {
+            display: flex;
+            flex-direction: column;
+        }
+        /* Width and height of the scrollbar */
+        .scrollbar {
+            scrollbar-width: thin; /* For Firefox */
+            scrollbar-color: #888 #f5f5f5; /* For Firefox */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f5f5f5; /* Set track color for Chrome/Safari/Opera */
+            border-radius: 1rem;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            border-radius: 1rem; /* Set border radius for round corners */
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; /* Set handle color on hover for Chrome/Safari/Opera */
+        }
+
+        /* Corner */
+        ::-webkit-scrollbar-corner {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
-    <form>
-        <div style="display: grid; grid-template-columns: max-content 1fr max-content 1fr max-content 1fr; grid-template-rows: repeat(3, auto); gap: 0.5rem; position: fixed; top: 1rem; left: 1rem; background-color: rgba(255, 255, 255, 0.8); padding: 1rem; border-radius: 0.5rem; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
-            <label for="widthInput" style="grid-column: 1;">Width:</label>
-            <input type="number" id="widthInput" value="5.5" style="grid-column: 2;">
-            
-            <label for="heightInput" style="grid-column: 3;">Height:</label>
-            <input type="number" id="heightInput" value="4" style="grid-column: 4;">
-            
-            <label for="depthInput" style="grid-column: 5;">Depth:</label>
-            <input type="number" id="depthInput" value="5" style="grid-column: 6;">
-        
-            <label for="objectPositionX" style="grid-column: 1;">Position X:</label>
-            <input type="number" id="objectPositionX" value="0" style="grid-column: 2;">
-        
-            <label for="objectPositionY" style="grid-column: 3;">Position Y:</label>
-            <input type="number" id="objectPositionY" value="0" style="grid-column: 4;">
-        
-            <label for="objectPositionZ" style="grid-column: 5;">Position Z:</label>
-            <input type="number" id="objectPositionZ" value="0" style="grid-column: 6;">
-        
-            <label for="objectRotationZ" style="grid-column: 1;">Rotation:</label>
-            <input type="number" id="objectRotationZ" value="0" style="grid-column: 2;">
-    
-            <label for="ceilingColor" style="grid-column: 1;">Ceiling Color:</label>
-            <input type="text" id="ceilingColor" value="#9f9f9f" style="grid-column: 2;">
-    
-            <label for="floorColor" style="grid-column: 3;">Floor Color:</label>
-            <input type="text" id="floorColor" value="#9f9f9f" style="grid-column: 4;">
-            
-            <label for="wall1Color" style="grid-column: 5;">Wall1 Color:</label>
-            <input type="text" id="wall1Color" value="#9f9f9f" style="grid-column: 6;">
-            
-            <label for="wall2Color" style="grid-column: 1;">Wall2 Color:</label>
-            <input type="text" id="wall2Color" value="#9f9f9f" style="grid-column: 2;">
-            
-            <label for="wall3Color" style="grid-column: 3;">Wall3 Color:</label>
-            <input type="text" id="wall3Color" value="#9f9f9f" style="grid-column: 4;">
-            
-            <label for="wall4Color" style="grid-column: 5;">Wall4 Color:</label>
-            <input type="text" id="wall4Color" value="#9f9f9f" style="grid-column: 6;">
-
-            <button type="button" id="selectMode" style=" grid-column: 1 / -1; border-radius: 1rem; box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.2); padding: 2px;">SELECT ENTIRE</button>
-
-            <button type="button" id="removeButton" style="grid-column: 1 / -1; border-radius: 1rem; box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.2); padding: 2px;">REMOVE</button>
-        </div>
-    </form>
-    
-    
-    <div id="furnituresContainer" style="position: absolute; top: 1rem; right: 1rem; background-color: rgba(255, 255, 255, 0.8); padding: 0.5rem; border-radius: 0.5rem; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); max-height: 50%; overflow-y: auto;">
-        <!-- Content goes here -->
+    <div id="toggleForm1" style="position: fixed; top: 1rem; left: 1rem; cursor: pointer; z-index: 10; background-color: #e3d9d992; border-radius: 0.3rem; padding: 0.4rem;">
+        <div style="width: 30px; height: 3px; background-color: #333; margin-bottom: 6px;"></div>
+        <div style="width: 30px; height: 3px; background-color: #333; margin-bottom: 6px;"></div>
+        <div style="width: 30px; height: 3px; background-color: #333;"></div>
     </div>
+    <div style="display: grid; grid-template-columns: 3fr 1fr; position: absolute; width:90%; left: 5rem">
+        <!-- <form id="form1" style="display: block; position: fixed; margin: auto;"> -->
+            <div id="form1" class="scrollbar" style="display: grid; overflow: auto; grid-column: 1; grid-template-columns: max-content 1fr max-content 1fr max-content 1fr; grid-template-rows: repeat(3, auto); gap: 0.5rem; top: 1rem; left: 5rem; background-color: rgba(255, 255, 255, 0.8); padding: 1rem; margin: 1rem; border-radius: 0.5rem; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+                <label for="widthInput" style="grid-column: 1;">Width:</label>
+                <input type="number" id="widthInput" value="5.5" style="grid-column: 2;">
+                
+                <label for="heightInput" style="grid-column: 3;">Height:</label>
+                <input type="number" id="heightInput" value="4" style="grid-column: 4;">
+                
+                <label for="depthInput" style="grid-column: 5;">Depth:</label>
+                <input type="number" id="depthInput" value="5" style="grid-column: 6;">
+            
+                <label for="objectPositionX" style="grid-column: 1;">Position X:</label>
+                <input type="number" id="objectPositionX" value="0" style="grid-column: 2;">
+            
+                <label for="objectPositionY" style="grid-column: 3;">Position Y:</label>
+                <input type="number" id="objectPositionY" value="0" style="grid-column: 4;">
+            
+                <label for="objectPositionZ" style="grid-column: 5;">Position Z:</label>
+                <input type="number" id="objectPositionZ" value="0" style="grid-column: 6;">
+            
+                <label for="objectRotationZ" style="grid-column: 1;">Rotation:</label>
+                <input type="number" id="objectRotationZ" value="0" style="grid-column: 2;">
+        
+                <label for="ceilingColor" style="grid-column: 1;">Ceiling Color:</label>
+                <jsuites-color id="ceilingColor" value="#9f9f9f" style="grid-column: 2;"></jsuites-color>
+                <!-- <input type="text" id="ceilingColor" value="#9f9f9f" style="grid-column: 2;"> -->
+        
+                <label for="floorColor" style="grid-column: 3;">Floor Color:</label>
+                <jsuites-color id="floorColor" value="#9f9f9f" style="grid-column: 4;"></jsuites-color>
+                <!-- <input type="text" id="floorColor" value="#9f9f9f" style="grid-column: 4;"> -->
+                
+                <label for="wall1Color" style="grid-column: 5;">Wall1 Color:</label>
+                <jsuites-color id="wall1Color" value="#9f9f9f" style="grid-column: 6;"></jsuites-color>
+                <!-- <input type="text" id="wall1Color" value="#9f9f9f" style="grid-column: 6;"> -->
+                
+                <label for="wall2Color" style="grid-column: 1;">Wall2 Color:</label>
+                <jsuites-color id="wall2Color" value="#9f9f9f" style="grid-column: 2;"></jsuites-color>
+                <!-- <input type="text" id="wall2Color" value="#9f9f9f" style="grid-column: 2;"> -->
+                
+                <label for="wall3Color" style="grid-column: 3;">Wall3 Color:</label>
+                <jsuites-color id="wall3Color" value="#9f9f9f" style="grid-column: 4;"></jsuites-color>
+                <!-- <input type="text" id="wall3Color" value="#9f9f9f" style="grid-column: 4;"> -->
+                
+                <label for="wall4Color" style="grid-column: 5;">Wall4 Color:</label>
+                <jsuites-color id="wall4Color" value="#9f9f9f" style="grid-column: 6;"></jsuites-color>
+                <!-- <input type="color" id="wall4Color" value="#9f9f9f" style="grid-column: 6;"> -->
+    
+                <button type="button" id="selectMode" style=" grid-column: 1 / -1; border-radius: 1rem; box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.2); padding: 2px;">SELECT SEGMENT</button>
+    
+                <button type="button" id="removeButton" style="grid-column: 1 / -1; border-radius: 1rem; box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.2); padding: 2px;">REMOVE</button>
+            </div>
+        <!-- </form> -->
+    
+        <div id="furnituresContainer" style="display: block; grid-column: 4; position: relative; top: 1rem; right: 1rem; background-color: rgba(255, 255, 255, 0.8); padding: 0.5rem; border-radius: 0.5rem; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); max-height: 80%; overflow: auto;">
+            <a href="{% url 'index' %}" class="outer" style="text-decoration: none;">Furniture Rental</a>
+            <!-- Content goes here -->
+        </div>
+    </div>
+    <!-- <canvas id="myCanvas"></canvas> -->
     
     
     
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://jsuites.net/v5/jsuites.js"></script>
+    <script src="https://jsuites.net/v5/jsuites.webcomponents.js"></script>
+    <link rel="stylesheet" href="https://jsuites.net/v5/jsuites.css" type="text/css" />
     <script>
         const STATIC_URL = "{% static 'assets3d/' %}";
     </script>
+    <script>
+        // Toggle visibility of form 1 when its hamburger icon is clicked
+        document.getElementById('toggleForm1').addEventListener('click', function() {
+            const form1 = document.getElementById('form1');
+            form1.style.display = (form1.style.display === 'none') ? 'grid' : 'none';
+            const form2 = document.getElementById('furnituresContainer');
+            form2.style.display = (form2.style.display === 'none') ? 'block' : 'none';
+        });
+    </script>
     <script type="module">
+        document.querySelector('.outer').addEventListener('click', (e) => {
+            e.preventDefault();
+        });
+        document.querySelectorAll('a').forEach((elem) => {
+            elem.addEventListener('click', ()=>{window.location.href = "{% url 'index' %}";});
+        });
         document.getElementById('widthInput').addEventListener('change', updateRoomSize, false);
         document.getElementById('heightInput').addEventListener('change', updateRoomSize, false);
         document.getElementById('depthInput').addEventListener('change', updateRoomSize, false);
-
+        
         document.getElementById('objectPositionX').addEventListener('change', updateObjectPosition, false);
         document.getElementById('objectPositionY').addEventListener('change', updateObjectPosition, false);
         document.getElementById('objectPositionZ').addEventListener('change', updateObjectPosition, false);
-
+        
         document.getElementById('objectRotationZ').addEventListener('change', updateObjectRotation, false);
-
-        document.getElementById('ceilingColor').addEventListener('change', updateRoomColor, false);
-        document.getElementById('floorColor').addEventListener('change', updateRoomColor, false);
-        document.getElementById('wall1Color').addEventListener('change', updateRoomColor, false);
-        document.getElementById('wall2Color').addEventListener('change', updateRoomColor, false);
-        document.getElementById('wall3Color').addEventListener('change', updateRoomColor, false);
-        document.getElementById('wall4Color').addEventListener('change', updateRoomColor, false);
+        
+        document.querySelectorAll('jsuites-color').forEach((elem)=>{elem.addEventListener('onchange', function(e) {
+            // Set the font color
+            e.target.children[0].style.color = this.value;
+            // Show on console
+            console.log('New value:' + this.value);
+            updateRoomColor();
+        });})
+        // document.getElementById('ceilingColor').addEventListener('change', updateRoomColor, false);
+        // document.getElementById('floorColor').addEventListener('change', updateRoomColor, false);
+        // document.getElementById('wall1Color').addEventListener('change', updateRoomColor, false);
+        // document.getElementById('wall2Color').addEventListener('change', updateRoomColor, false);
+        // document.getElementById('wall3Color').addEventListener('change', updateRoomColor, false);
+        // document.getElementById('wall4Color').addEventListener('change', updateRoomColor, false);
 
         document.getElementById('removeButton').addEventListener('click', removeFurniture, false);
 
         document.getElementById('selectMode').addEventListener('click', toggleMode, false);
 
-        let selectModes = ["SELECT SEGMENT", "SELECT ENTIRE"];
+        let selectModes = [ "SELECT ENTIRE", "SELECT SEGMENT"];
         let selectMode = 0;
 
         function toggleMode() {
             document.getElementById('selectMode').innerHTML = selectModes[selectMode];
             selectMode = (selectMode + 1) % 2;
-            console.log(selectModes[selectMode]);
+            // console.log(selectModes[selectMode]);
+            setInputFields();
+            // console.log(clickedObject.position.x + " " + clickedObject.position.y + " " + clickedObject.position.z + " " + clickedObject.rotation.z)
+        }
+
+        function setInputFields() {
+            if (object && selectMode === 1) {
+                document.getElementById('objectPositionX').value = object.position.x*5;
+                document.getElementById('objectPositionY').value = object.position.y*5;
+                document.getElementById('objectPositionZ').value = object.position.z*5;
+                document.getElementById('objectRotationZ').value = object.rotation.z;
+            }
+            if (clickedObject && selectMode === 0) {
+                document.getElementById('objectPositionX').value = clickedObject.position.x/5;
+                document.getElementById('objectPositionY').value = -clickedObject.position.z/5;
+                document.getElementById('objectPositionZ').value = clickedObject.position.y/5;
+                document.getElementById('objectRotationZ').value = clickedObject.rotation.z;
+            }
         }
 
 
         // Set up the scene, camera, and renderer
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.001, 1000);
+        // const renderer = new THREE.WebGLRenderer();
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0xffffff); // Set background color to white
@@ -182,7 +271,7 @@
                 div.innerHTML = furniture;
                 div.style.width = '60px';
                 div.style.height = '20px';
-                div.style.background = 'url(/static/assets3d/' + furniture + '.png) no-repeat';
+                div.style.background = 'url(/static/assets_img/' + furniture + '.png) no-repeat';
                 div.style.backgroundSize = '60px 20px';
                 div.style.cursor = 'pointer';
 
@@ -198,72 +287,77 @@
 
         // Add product object to an array for easier access
         // Add product object to an array for easier access
-let object = null;
-let clickedObject = null;
-let loadedObjects = [];
-const room = scene.getObjectByName('room');
+        let object = null;
+        let clickedObject = null;
+        let loadedObjects = [];
+        const room = scene.getObjectByName('room');
 
-// Load furniture
-function loadFurniture(furniture) {
-    const loader = new THREE.GLTFLoader();
-    loader.load('/static/assets3d/' + furniture + '.glb', glb => {
-        const loadedProduct = glb.scene;
-        // Calculate the position of the base of the room
-        const roomBasePositionY = room.position.y - (roomHeight / 2); // Assuming room is centered at origin
+        // Load furniture
+        function loadFurniture(furniture) {
+            const loader = new THREE.GLTFLoader();
+            loader.load('/static/assets3d/' + furniture + '.glb', glb => {
+                const loadedProduct = glb.scene;
+                // Calculate the position of the base of the room
+                const roomBasePositionY = room.position.y - (roomHeight / 2); // Assuming room is centered at origin
 
-        // Set the position of the loaded model at the base of the room
-        loadedProduct.position.set(0, roomBasePositionY, 0); // Adjust as needed
-        loadedProduct.castShadow = true;
-        loadedProduct.name = furniture;
-        loadedObjects.push(loadedProduct);
+                // Set the position of the loaded model at the base of the room
+                loadedProduct.position.set(0, roomBasePositionY, 0); // Adjust as needed
+                console.log(loadedProduct.position);
+                console.log(roomBasePositionY);
+                loadedProduct.castShadow = true;
+                loadedProduct.name = furniture;
+                loadedObjects.push(loadedProduct);
 
-        object = loadedProduct; // Assigning the loaded product to the global variable
-        scene.add(loadedProduct);
-        console.log("loadedObjects[0].name " + loadedObjects[0].name);
-        console.log("object.name " + object.name);
+                // object = loadedProduct; // Assigning the loaded product to the global variable
+                // clickedObject = loadedProduct; // Get the object by its name
+                setInputFields();
+                scene.add(loadedProduct);
+                // console.log("loadedObjects[0].name " + loadedObjects[0].name);
+                // console.log("object.name " + object.name);
 
-        // Add event listener to the renderer's DOM element
-        renderer.domElement.addEventListener('click', function(event) {
-            // Calculate mouse position in normalized device coordinates
-            const mouse = {
-                x: (event.clientX / window.innerWidth) * 2 - 1,
-                y: -(event.clientY / window.innerHeight) * 2 + 1
-            };
-            clickedObject = scene.getObjectByName(furniture); // Get the object by its name
+                // Add event listener to the renderer's DOM element
+                renderer.domElement.addEventListener('click', function(event) {
+                    // Calculate mouse position in normalized device coordinates
+                    const mouse = {
+                        x: (event.clientX / window.innerWidth) * 2 - 1,
+                        y: -(event.clientY / window.innerHeight) * 2 + 1
+                    };
 
-            // Raycasting to check if the mouse intersects with the clicked object
-            const raycaster = new THREE.Raycaster();
-            raycaster.setFromCamera(mouse, camera);
+                    // Raycasting to check if the mouse intersects with the clicked object
+                    const raycaster = new THREE.Raycaster();
+                    raycaster.setFromCamera(mouse, camera);
 
-            // Check for intersections
-            const intersects = raycaster.intersectObjects(loadedObjects, true);
+                    // Check for intersections
+                    const intersects = raycaster.intersectObjects(loadedObjects, true);
 
-            if (intersects.length > 0) {
-                console.log(furniture + ' clicked!');
-                object = intersects[0].object;
-                console.log("object.name " + object.name);
-                clickedObject = scene.getObjectByName(object.name).parent.parent;
-                document.getElementById('objectPositionX').value = clickedObject.position.x;
-                document.getElementById('objectPositionY').value = clickedObject.position.y;
-                document.getElementById('objectPositionZ').value = clickedObject.position.z;
-                document.getElementById('objectRotationZ').value = clickedObject.rotation.z;
-            }
-            // if (clickedObject) {
-            // }
-        });
-    });
-}
+                    if (intersects.length > 0) {
+                        // console.log(furniture + ' clicked!');
+                        object = intersects[0].object;
+                        // console.log("object.name " + object.name);
+                        clickedObject = scene.getObjectByName(object.name).parent.parent;
+                        setInputFields();
+                        console.log(clickedObject.position);
+                        // document.getElementById('objectPositionX').value = clickedObject.position.x;
+                        // document.getElementById('objectPositionY').value = clickedObject.position.y;
+                        // document.getElementById('objectPositionZ').value = clickedObject.position.z;
+                        // document.getElementById('objectRotationZ').value = clickedObject.rotation.z;
+                    }
+                    // if (clickedObject) {
+                    // }
+                });
+            });
+        }
 
 
         function removeFurniture() {
-            console.log('clickedObject: ' + clickedObject);
-            if (clickedObject && selectMode == 1) {
-                console.log('clickedObject removed: ' + clickedObject);
+            // console.log('clickedObject: ' + clickedObject);
+            if (clickedObject && selectMode === 0) {
+                // console.log('clickedObject removed: ' + clickedObject);
                 clickedObject.parent.remove( clickedObject );
                 clickedObject = null;
             }
-            else if (object && selectMode == 0) {
-                console.log('object removed: ' + object);
+            else if (object && selectMode === 1) {
+                // console.log('object removed: ' + object);
                 object.parent.remove( object );
                 object = null;
             }
@@ -381,32 +475,39 @@ function loadFurniture(furniture) {
 
             const room = scene.getObjectByName('room');
             room.material = materials;
+            console.log(room.material)
+            console.log(materials)
         }
 
 
         function updateObjectPosition() {
-            console.log(object);
-            if (object && selectMode === 0) {
+            // console.log(object);
+            if (object && selectMode === 1) {
                 object.position.set(
                     parseFloat(document.getElementById('objectPositionX').value/5),
                     parseFloat(document.getElementById('objectPositionY').value/5),
                     parseFloat(document.getElementById('objectPositionZ').value/5)
                 );
             }
-            if (clickedObject && selectMode === 1) {
+            if (clickedObject && selectMode === 0) {
                 clickedObject.position.set(
-                    parseFloat(document.getElementById('objectPositionX').value/5),
-                    parseFloat(document.getElementById('objectPositionZ').value/5),
-                    parseFloat(-document.getElementById('objectPositionY').value/5)
+                    parseFloat(document.getElementById('objectPositionX').value*5),
+                    parseFloat(document.getElementById('objectPositionZ').value*5),
+                    parseFloat(-document.getElementById('objectPositionY').value*5)
                 );
             }
         }
 
         function updateObjectRotation() {
-            if (object) {
+            if (object && selectMode === 1) {
                 object.rotation.set(0,0,
                     parseFloat(document.getElementById('objectRotationZ').value/5)
                 );
+            }
+            if (clickedObject && selectMode === 0) {
+                clickedObject.rotation.set(0,
+                    parseFloat(document.getElementById('objectRotationZ').value/5)
+                ,0);
             }
         }
 
@@ -454,6 +555,9 @@ function loadFurniture(furniture) {
         function animate() {
             requestAnimationFrame(animate);
             camera.rotation.y += 0.1 * targetRotationX;
+            updateObjectPosition();
+            updateObjectRotation();
+            // updateRoomSize();  for some reason it is not letting the colors of the room change
             renderer.render(scene, camera);
         }
 
@@ -479,7 +583,7 @@ function loadFurniture(furniture) {
             // Log if a sofa is clicked
             for (let i = 0; i < intersects.length; i++) {
                 if (intersects[i].object.userData.isSofa) {
-                    console.log('Sofa clicked!');
+                    // console.log('Sofa clicked!');
                     // Add your logic here for moving or rotating the sofa
                     break;
                 }

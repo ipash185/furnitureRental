@@ -1,0 +1,22 @@
+{% extends 'db_base.html' %}
+
+{% block db_title %}Notifications{% endblock %}
+
+{% block db_content %}
+    <div class="card-body">
+        <!-- New card content goes here -->
+        {% for notification in notifications %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Date and Time:  notification.created_at </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ notification.notification }}</p>
+                    <div style="text-align: right;">
+                        <a href="{% url 'delete_notification' notification.pk %}" class="btn btn-success">Mark as Read</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

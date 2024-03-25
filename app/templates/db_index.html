@@ -1,21 +1,33 @@
 {% extends 'db_base.html' %}
+{% load crispy_forms_filters %}
+
 {% block db_title %}
     Dashboard
 {% endblock %}
 {% block db_content %}
-
-    <div class="d-flex justify-content-between">
-        <div>
-            <p>Investment: {{ investment }}</p>
-            <p>Revenue: {{ revenue }}</p>
+    <div class="d-flex justify-content-between flex-column">
+        <div class="d-flex justify-content-between card">
+            <div>
+                <p>Investment: {{ investment }}</p>
+                <p>Revenue: {{ revenue }}</p>
+            </div>
+        </div>
+        <div class="card">
+            <!-- Add your form here -->
+            <form method="POST" action="{% url 'dashboard' %}">
+                {% csrf_token %}{{ form | crispy }}
+                <!-- Add more form fields as needed -->
+                <button type="submit" class="btn btn-primary mt-3">Set Threshold</button>
+            </form>
+            
         </div>
     </div>
 
     <div class="row">
         {% for product in product %}
 
-        <div class="card m-3 p-1" style="width: 20rem;">
-            <img src="{{ product.image.url }}" class="card-img-top"  width="200" height="200" alt="{{product.image}}">
+        <div class="card m-3 p-1" style="width: 20rem; display: grid; grid-template-rows: 1fr auto; align-items: center;">
+            <img src="{{ product.image.url }}" class="card-img-top"  width="200" alt="{{product.image}}" style="object-fit: contain;">
             <div class="card-body">
                 <h5 class="card-title">{{ product.name|title }}</h5>
                     <p class="card-text">Price {{ product.price }}</p>

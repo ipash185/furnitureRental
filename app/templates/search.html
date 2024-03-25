@@ -15,7 +15,7 @@
                             <div class="card m-2" style="width: 20rem;">
                                 <a href="{% url 'product_detail' product.pk %}"
                                    class="m-3 p-1 text-decoration-none text-black">
-                                    <img src="{{ product.image.url }}" class="card-img-top" width="200" height="200"
+                                    <img src="{{ product.image.url }}" class="card-img-top" width="200" style="object-fit: contain;"
                                          alt="{{ product.image }}">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ product.name|truncatechars:'90' }}</h5>

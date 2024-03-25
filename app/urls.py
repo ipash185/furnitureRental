@@ -18,6 +18,9 @@ urlpatterns = [
     path('home/products/billing/<int:product_id>/', views.billing, name='billing'),
 
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/view-notifications/', views.view_notifications, name='view_notifications'),
+    path('dashboard/delete-notification/<int:notification_id>', views.delete_notification, name='delete_notification'),
+#     path('dashboard/set_threshold', views.set_threshold, name='set_threshold'),
     path('dashboard/add-product/', views.add_product, name='add_product'),
     path('dashboard/product/delete/<int:product_id>/', views.delete_product, name='delete_product'),
     path('dashboard/product/edit/<int:product_id>/', views.edit_product, name='edit_product'),
@@ -26,7 +29,7 @@ urlpatterns = [
          name='accepted_rent_requests'),
     path('dashboard/rent/all/request/rejected/<int:rent_id>/', views.reject_rent_request,
          name='rejected_rent_requests'),
-    path('dashboard/rent/all/wait-for-delivey/', views.delivery_rented_products, name='delivery_rented_products'),
+    path('dashboard/rent/all/wait-for-delivery/', views.delivery_rented_products, name='delivery_rented_products'),
     path('dashboard/rent/all/delivered/<int:rent_id>/', views.delivered_rented_products,
          name='delivered_rented_products'),
     path('dashboard/rent/all/rented-products/', views.rented_products, name='rented_products'),
