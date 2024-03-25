@@ -29,9 +29,9 @@ SECRET_KEY = "123"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1","localhost", "laptop-legion", "laptop-legion.tail25c21.ts.net"]
+ALLOWED_HOSTS = ["127.0.0.1","localhost", "furniturerental.store"]
 
-CSRF_TRUSTED_ORIGINS = ["https://laptop-legion.tail25c21.ts.net"]
+CSRF_TRUSTED_ORIGINS = ["https://furniturerental.store"]
 
 
 # Application definition
