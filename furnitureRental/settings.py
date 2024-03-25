@@ -29,9 +29,9 @@ SECRET_KEY = "123"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "laptop-legion.tail25c21.ts.net", "trailblazers.tail25c21.ts.net", "furniturerental.store"]
+ALLOWED_HOSTS = ["127.0.0.1","localhost", "furniturerental.store"]
 
-CSRF_TRUSTED_ORIGINS = ["https://laptop-legion.tail25c21.ts.net", "https://trailblazers.tail25c21.ts.net", "https://furniturerental.store"] 
+CSRF_TRUSTED_ORIGINS = ["https://furniturerental.store"]
 
 
 # Application definition
@@ -146,6 +146,13 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static')
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "ashu.anshul12@gmail.com"

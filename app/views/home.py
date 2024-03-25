@@ -1,21 +1,98 @@
 from datetime import date, timedelta
 
+from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import get_template
+from django.conf import settings
 
 from app.decorators import user_information_required
 from app.forms import RentForm
 from app.forms.comment import CommentForm
-from app.models import Product, Rent, Comment, Profit
+from app.forms import ThresholdForm
+from app.models import Product, Rent, Comment, Profit, Threshold, Notifications
 from io import BytesIO
 from xhtml2pdf import pisa
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 from decimal import Decimal
 
+def alert_below_threshold(category):
+    try:
+        # Create a notification message based on the provided category
+        notification_message = f"The available number of category : {category} products has fallen below the threshold."
+
+        # Create a new instance of Notifications with the notification message
+        notification_instance = Notifications(notification=notification_message)
+
+        # Save the new instance to the database
+        notification_instance.save()
+
+        # Send an email with the notification message to the specified recipient email
+
+        YOUR_GOOGLE_EMAIL = 'ashu.anshul12@gmail.com'  # The email you setup to send the email using app password
+        YOUR_GOOGLE_EMAIL_APP_PASSWORD = 'acbvynsmlayocfba'  # The app password you generated
+
+        smtpserver = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        smtpserver.ehlo()
+        smtpserver.login(YOUR_GOOGLE_EMAIL, YOUR_GOOGLE_EMAIL_APP_PASSWORD)
+
+        # Test send mail
+        sent_from = YOUR_GOOGLE_EMAIL
+        sent_to = ["raajadas.rd@gmail.com", "ashu.anshul12@gmail.com", "theantiksur@gmail.com"]
+        # sent_to = ["ashu.anshul12@gmail.com"]
+        subject = "Notification: Product Threshold Alert"
+        body = notification_message
+
+        msg = MIMEMultipart()
+        msg['From'] = sent_from
+        msg['To'] = ", ".join(sent_to)
+        msg['Subject'] = subject
+
+        msg.attach(MIMEText(body, 'plain'))
+
+        smtpserver.sendmail(sent_from, sent_to, msg.as_string())
+
+        smtpserver.close()
+
+        # Optionally, print the category for debugging purposes
+        # print(category)
+        # print(notification_message)
+
+    except ValidationError as e:
+        # Handle validation errors (e.g., if the notification message is invalid)
+        print(f"Validation error: {e}")
+
+    except Exception as e:
+        # Handle other exceptions (e.g., SMTP errors)
+        print(f"An error occurred: {e}")
+
+def check_update_threshold(category, action):
+    threshold = Threshold.objects.first()  # As there's only one instance of Threshold
+    print(threshold)
+    if category == 'sofa':
+        threshold.available_sofa += 1*action
+        if threshold.available_sofa < threshold.threshold_sofa:
+            alert_below_threshold(category)
+    elif category == 'chair':
+        threshold.available_chair += 1*action
+        if threshold.available_chair < threshold.threshold_chair:
+            alert_below_threshold(category)
+    elif category == 'table':
+        threshold.available_table += 1*action
+        if threshold.available_table < threshold.threshold_table:
+            alert_below_threshold(category)
+    elif category == 'bed':
+        threshold.available_bed += 1*action
+        if threshold.available_bed < threshold.threshold_bed:
+            alert_below_threshold(category)
+    threshold.save()
+    
 
 def home(request):
     products = Product.objects.filter(available=True).order_by('?')
@@ -64,6 +141,10 @@ def rent(request, product_id):
             rents = form.save(commit=False)
             rents.rental_day = int((rents.end_date - rents.start_date).days)
             rents.total_price = rents.rental_day * request_product.price
+
+            # Update the count of available products in the Threshold model
+            # second argument to denote whether to increase or decrease that count
+            check_update_threshold(request_product.category, -1)
             request_product.available = False
             request_product.save()
             rents.save()
@@ -89,6 +170,10 @@ def my_rent_products(request):
 @login_required(login_url='login')
 def cancel_rent(request, rent_id):
     rents = Rent.objects.get(id=rent_id)
+    product = rents.product
+    product.available = True
+    check_update_threshold(product.category, 1)
+    product.save()
     rents.delete()
     return redirect('my_rent_products')
 
@@ -159,3 +244,6 @@ def render_to_pdf(template_src, context_dict=None):
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
+
+def virtual(request):
+    return render(request, 'virtual.html')

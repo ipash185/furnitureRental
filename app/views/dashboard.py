@@ -4,14 +4,67 @@ from django.shortcuts import render, redirect
 
 from datetime import date
 
-from app.forms import ProductForm
-from app.models import Product, Rent, Profit
+from app.forms import ProductForm, ThresholdForm
+from app.models import Product, Rent, Profit, Notifications, Threshold
 
 from decimal import Decimal
+
+from .home import check_update_threshold, alert_below_threshold
+
+
+# def set_threshold(request):
+#     if request.method == 'POST':
+#         form = ThresholdForm(request.POST)
+#         if form.is_valid():
+#             threshold_sofa = form.cleaned_data['threshold_sofa']
+#             threshold_chair = form.cleaned_data['threshold_chair']
+#             threshold_table = form.cleaned_data['threshold_table']
+#             threshold_bed = form.cleaned_data['threshold_bed']
+            
+#             # Update or create the Threshold model instance
+#             threshold, _ = Threshold.objects.get_or_create(pk=1)  # Assuming there's only one instance
+#             threshold.threshold_sofa = threshold_sofa
+#             threshold.threshold_chair = threshold_chair
+#             threshold.threshold_table = threshold_table
+#             threshold.threshold_bed = threshold_bed
+#             print(threshold.threshold_bed, threshold.threshold_table, threshold.threshold_chair, threshold.threshold_sofa)
+#             threshold.save()
+
+#             return redirect('dashboard')  # Redirect to a success page or any other page
+#         else:
+#             print(form.errors)
+#     else:
+#         form = ThresholdForm()
+#         # print("invalid form")
+    
+#     return redirect('dashboard')
 
 @login_required(login_url='/login/')
 @staff_member_required()
 def dashboard(request):
+    threshold, _ = Threshold.objects.get_or_create(pk=1)  # Assuming there's only one instance
+    if request.method == 'POST':
+        form = ThresholdForm(request.POST)
+        if form.is_valid():
+            threshold_sofa = form.cleaned_data['threshold_sofa']
+            threshold_chair = form.cleaned_data['threshold_chair']
+            threshold_table = form.cleaned_data['threshold_table']
+            threshold_bed = form.cleaned_data['threshold_bed']
+            
+            # Update or create the Threshold model instance
+            threshold.threshold_sofa = threshold_sofa
+            threshold.threshold_chair = threshold_chair
+            threshold.threshold_table = threshold_table
+            threshold.threshold_bed = threshold_bed
+            print(threshold.threshold_bed, threshold.threshold_table, threshold.threshold_chair, threshold.threshold_sofa)
+            threshold.save()
+
+            return redirect('dashboard')  # Redirect to a success page or any other page
+        else:
+            print(form.errors)
+            return redirect('dashboard')
+    else:
+        form = ThresholdForm(initial={'threshold_sofa': threshold.threshold_sofa, 'threshold_chair': threshold.threshold_chair, 'threshold_table': threshold.threshold_table, 'threshold_bed': threshold.threshold_bed})
     product = Product.objects.all()
     
     if Profit.objects.count() == 0:
@@ -21,7 +74,24 @@ def dashboard(request):
     investment = ref.investment
     revenue = ref.revenue
     
-    return render(request, 'db_index.html', {"product": product, "investment": investment, "revenue": revenue})
+    return render(request, 'db_index.html', {"product": product, "investment": investment, "revenue": revenue, "form": form})
+
+@login_required(login_url='/login/')
+@staff_member_required()
+def view_notifications(request):
+    
+    notifications = Notifications.objects.all()
+    
+    return render(request, 'notifications.html', {"notifications": notifications})
+
+@login_required(login_url='/login/')
+@staff_member_required()
+def delete_notification(request, notification_id):
+    
+    notification = Notifications.objects.get(id=notification_id)
+    notification.delete()
+
+    return redirect('view_notifications')
 
 
 @login_required(login_url='/login/')
@@ -102,6 +172,7 @@ def reject_rent_request(request, rent_id):
     rent = Rent.objects.get(id=rent_id)
     rent.status = 'rejected'
     rent.product.available = True
+    check_update_threshold(rent.product.category, 1)
     rent.product.save()
     rent.save()
     return redirect('pending_rent_requests')
@@ -157,6 +228,7 @@ def accept_return_request(request, rent_id):
         rent.product.price -= rent.product.price * Decimal(0.1)
     
     rent.product.available = True
+    check_update_threshold(rent.product.category, 1)
     rent.product.save()
     rent.save()
     return redirect('dashboard')
