@@ -122,16 +122,17 @@
             <!-- Content goes here -->
         </div>
     </div>
+    <!-- vr button at the bottom center-->
+    <button id="arvrButton" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">AR/VR</button>
     <!-- <canvas id="myCanvas"></canvas> -->
     
     
     
-    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://jsuites.net/v5/jsuites.js"></script>
     <script src="https://jsuites.net/v5/jsuites.webcomponents.js"></script>
-    <script src="{% static 'VRButton/VRButton.js' %}"></script>
     <link rel="stylesheet" href="https://jsuites.net/v5/jsuites.css" type="text/css" />
     <script>
         const STATIC_URL = "{% static 'assets3d/' %}";
@@ -146,7 +147,6 @@
         });
     </script>
     <script type="module">
-        import { VRButton } from '{% static 'VRButton/VRButton.js' %}';
         document.querySelector('.outer').addEventListener('click', (e) => {
             e.preventDefault();
         });
@@ -180,6 +180,74 @@
         document.getElementById('removeButton').addEventListener('click', removeFurniture, false);
 
         document.getElementById('selectMode').addEventListener('click', toggleMode, false);
+        // Check if DeviceOrientationEvent is supported
+        if (window.DeviceOrientationEvent) {
+            // Variable to keep track of current mode
+            var isVRMode = false;
+
+            // Function to toggle AR/VR mode
+            function toggleARVR() {
+                isVRMode = !isVRMode;
+                if (isVRMode) {
+                    // Enter VR mode
+                    enterVRMode();
+                } else {
+                    // Exit VR mode
+                    exitVRMode();
+                }
+            }
+
+            // Function to enter VR mode
+            function enterVRMode() {
+                // Perform actions to enter VR mode
+                // For example, enable VR rendering, adjust camera settings, etc.
+
+                // For demonstration purposes, let's just log a message
+                console.log('Entered VR mode');
+
+                // Listen for device orientation changes and update camera rotation
+                window.addEventListener('deviceorientation', updateCameraRotation, false);
+            }
+
+            // Function to exit VR mode
+            function exitVRMode() {
+                // Perform actions to exit VR mode
+                // For example, disable VR rendering, reset camera settings, etc.
+
+                // For demonstration purposes, let's just log a message
+                console.log('Exited VR mode');
+
+                // Remove device orientation listener
+                window.removeEventListener('deviceorientation', updateCameraRotation, false);
+            }
+
+            // Function to update camera rotation based on device orientation
+            function updateCameraRotation(event) {
+                // Extract device orientation data
+                var alpha = event.alpha; // rotation around z-axis
+                var beta = event.beta;   // rotation around x-axis
+                var gamma = event.gamma; // rotation around y-axis
+
+                // Use device orientation data to update camera rotation
+                // In Three.js, you would typically use a camera object
+                // Assume camera is already defined in your scene
+                camera.rotation.x = beta * Math.PI / 180;   // Convert degrees to radians
+                camera.rotation.y = gamma * Math.PI / 180;  // Convert degrees to radians
+                camera.rotation.z = alpha * Math.PI / 180;  // Convert degrees to radians
+
+                // Optionally, you might want to limit the range of rotation
+                // For example:
+                // camera.rotation.x = Math.min(Math.max(beta * Math.PI / 180, -Math.PI / 2), Math.PI / 2);
+            }
+
+            // Add click event listener to the AR/VR button
+            var arvrButton = document.getElementById('arvrButton');
+            arvrButton.addEventListener('click', toggleARVR);
+        } else {
+            // DeviceOrientationEvent is not supported
+            console.log('Device orientation not supported');
+        }
+
 
         let selectModes = [ "SELECT ENTIRE", "SELECT SEGMENT"];
         let selectMode = 0;
@@ -217,8 +285,6 @@
         renderer.setClearColor(0xffffff); // Set background color to white
         // renderer.shadowMap.enabled = true; // Enable shadows
         document.body.appendChild(renderer.domElement);
-        document.body.appendChild( VRButton.createButton( renderer ) );
-        renderer.xr.enabled = true;
 
         // Set light
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
