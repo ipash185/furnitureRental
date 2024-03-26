@@ -126,11 +126,12 @@
     
     
     
-
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://jsuites.net/v5/jsuites.js"></script>
     <script src="https://jsuites.net/v5/jsuites.webcomponents.js"></script>
+    <script src="{% static 'VRButton/VRButton.js' %}"></script>
     <link rel="stylesheet" href="https://jsuites.net/v5/jsuites.css" type="text/css" />
     <script>
         const STATIC_URL = "{% static 'assets3d/' %}";
@@ -145,6 +146,7 @@
         });
     </script>
     <script type="module">
+        import { VRButton } from '{% static 'VRButton/VRButton.js' %}';
         document.querySelector('.outer').addEventListener('click', (e) => {
             e.preventDefault();
         });
@@ -215,6 +217,8 @@
         renderer.setClearColor(0xffffff); // Set background color to white
         // renderer.shadowMap.enabled = true; // Enable shadows
         document.body.appendChild(renderer.domElement);
+        document.body.appendChild( VRButton.createButton( renderer ) );
+        renderer.xr.enabled = true;
 
         // Set light
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
@@ -413,21 +417,21 @@
         let touchStartY = 0;
         let touchEndX = 0;
         let touchEndY = 0;
-
+// key down with arrow and wasd
         function onKeyDown(event) {
-            if (event.code === 'ArrowUp') {
+            if (event.code === 'ArrowUp' || event.code === 'KeyW') {
                 moveCameraForward(1);
             }
 
-            if (event.code === 'ArrowDown') {
+            if (event.code === 'ArrowDown' || event.code === 'KeyS') {
                 moveCameraForward(-1);
             }
 
-            if (event.code === 'ArrowLeft') {
+            if (event.code === 'ArrowLeft' || event.code === 'KeyA') {
                 moveCameraRight(-1);
             }
 
-            if (event.code === 'ArrowRight') {
+            if (event.code === 'ArrowRight' || event.code === 'KeyD') {
                 moveCameraRight(1);
             }
         }
