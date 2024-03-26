@@ -1,11 +1,9 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Room</title>
+    <title>Room Planning</title>
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
@@ -50,547 +48,132 @@
         <div style="width: 30px; height: 3px; background-color: #333;"></div>
     </div>
     <div style="display: grid; grid-template-columns: 3fr 1fr; position: absolute; width:90%; left: 5rem">
-        <!-- <form id="form1" style="display: block; position: fixed; margin: auto;"> -->
-            <div id="form1" class="scrollbar" style="display: grid; overflow: auto; grid-column: 1; grid-template-columns: max-content 1fr max-content 1fr max-content 1fr; grid-template-rows: repeat(3, auto); gap: 0.5rem; top: 1rem; left: 5rem; background-color: rgba(255, 255, 255, 0.8); padding: 1rem; margin: 1rem; border-radius: 0.5rem; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
-                <label for="widthInput" style="grid-column: 1;">Width:</label>
-                <input type="number" id="widthInput" value="5.5" style="grid-column: 2;">
-                
-                <label for="heightInput" style="grid-column: 3;">Height:</label>
-                <input type="number" id="heightInput" value="4" style="grid-column: 4;">
-                
-                <label for="depthInput" style="grid-column: 5;">Depth:</label>
-                <input type="number" id="depthInput" value="5" style="grid-column: 6;">
+        <div id="form1" class="scrollbar" style="display: grid; overflow: auto; grid-column: 1; grid-template-columns: max-content 1fr max-content 1fr max-content 1fr; grid-template-rows: repeat(3, auto); gap: 0.5rem; top: 1rem; left: 5rem; background-color: rgba(255, 255, 255, 0.8); padding: 1rem; margin: 1rem; border-radius: 0.5rem; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+            <label for="widthInput" style="grid-column: 1;">Width:</label>
+            <input type="number" id="widthInput" value="5.5" style="grid-column: 2;">
             
-                <label for="objectPositionX" style="grid-column: 1;">Position X:</label>
-                <input type="number" id="objectPositionX" value="0" style="grid-column: 2;">
+            <label for="heightInput" style="grid-column: 3;">Height:</label>
+            <input type="number" id="heightInput" value="4" style="grid-column: 4;">
             
-                <label for="objectPositionY" style="grid-column: 3;">Position Y:</label>
-                <input type="number" id="objectPositionY" value="0" style="grid-column: 4;">
-            
-                <label for="objectPositionZ" style="grid-column: 5;">Position Z:</label>
-                <input type="number" id="objectPositionZ" value="0" style="grid-column: 6;">
-            
-                <label for="objectRotationZ" style="grid-column: 1;">Rotation:</label>
-                <input type="number" id="objectRotationZ" value="0" style="grid-column: 2;">
+            <label for="depthInput" style="grid-column: 5;">Depth:</label>
+            <input type="number" id="depthInput" value="5" style="grid-column: 6;">
         
-                <label for="ceilingColor" style="grid-column: 1;">Ceiling Color:</label>
-                <jsuites-color id="ceilingColor" value="#9f9f9f" style="grid-column: 2;"></jsuites-color>
-                <!-- <input type="text" id="ceilingColor" value="#9f9f9f" style="grid-column: 2;"> -->
+            <label for="objectPositionX" style="grid-column: 1;">Position X:</label>
+            <input type="number" id="objectPositionX" value="0" style="grid-column: 2;">
         
-                <label for="floorColor" style="grid-column: 3;">Floor Color:</label>
-                <jsuites-color id="floorColor" value="#9f9f9f" style="grid-column: 4;"></jsuites-color>
-                <!-- <input type="text" id="floorColor" value="#9f9f9f" style="grid-column: 4;"> -->
-                
-                <label for="wall1Color" style="grid-column: 5;">Wall1 Color:</label>
-                <jsuites-color id="wall1Color" value="#9f9f9f" style="grid-column: 6;"></jsuites-color>
-                <!-- <input type="text" id="wall1Color" value="#9f9f9f" style="grid-column: 6;"> -->
-                
-                <label for="wall2Color" style="grid-column: 1;">Wall2 Color:</label>
-                <jsuites-color id="wall2Color" value="#9f9f9f" style="grid-column: 2;"></jsuites-color>
-                <!-- <input type="text" id="wall2Color" value="#9f9f9f" style="grid-column: 2;"> -->
-                
-                <label for="wall3Color" style="grid-column: 3;">Wall3 Color:</label>
-                <jsuites-color id="wall3Color" value="#9f9f9f" style="grid-column: 4;"></jsuites-color>
-                <!-- <input type="text" id="wall3Color" value="#9f9f9f" style="grid-column: 4;"> -->
-                
-                <label for="wall4Color" style="grid-column: 5;">Wall4 Color:</label>
-                <jsuites-color id="wall4Color" value="#9f9f9f" style="grid-column: 6;"></jsuites-color>
-                <!-- <input type="color" id="wall4Color" value="#9f9f9f" style="grid-column: 6;"> -->
-    
-                <button type="button" id="selectMode" style=" grid-column: 1 / -1; border-radius: 1rem; box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.2); padding: 2px;">SELECT SEGMENT</button>
-    
-                <button type="button" id="removeButton" style="grid-column: 1 / -1; border-radius: 1rem; box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.2); padding: 2px;">REMOVE</button>
-            </div>
-        <!-- </form> -->
-    
-        <div id="furnituresContainer" style="display: block; grid-column: 4; position: relative; top: 1rem; right: 1rem; background-color: rgba(255, 255, 255, 0.8); padding: 0.5rem; border-radius: 0.5rem; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); max-height: 80%; overflow: auto;">
-            <a href="{% url 'index' %}" class="outer" style="text-decoration: none;">Furniture Rental</a>
-            <!-- Content goes here -->
+            <label for="objectPositionY" style="grid-column: 3;">Position Y:</label>
+            <input type="number" id="objectPositionY" value="0" style="grid-column: 4;">
+        
+            <label for="objectPositionZ" style="grid-column: 5;">Position Z:</label>
+            <input type="number" id="objectPositionZ" value="0" style="grid-column: 6;">
+        
+            <label for="objectRotationZ" style="grid-column: 1;">Rotation:</label>
+            <input type="number" id="objectRotationZ" value="0" style="grid-column: 2;">
+
+            <label for="ceilingColor" style="grid-column: 1;">Ceiling Color:</label>
+            <jsuites-color id="ceilingColor" value="#9f9f9f" style="grid-column: 2;"></jsuites-color>
+        
+            <label for="floorColor" style="grid-column: 3;">Floor Color:</label>
+            <jsuites-color id="floorColor" value="#9f9f9f" style="grid-column: 4;"></jsuites-color>
+            
+            <label for="wall1Color" style="grid-column: 5;">Wall1 Color:</label>
+            <jsuites-color id="wall1Color" value="#9f9f9f" style="grid-column: 6;"></jsuites-color>
+            
+            <label for="wall2Color" style="grid-column: 1;">Wall2 Color:</label>
+            <jsuites-color id="wall2Color" value="#9f9f9f" style="grid-column: 2;"></jsuites-color>
+            
+            <label for="wall3Color" style="grid-column: 3;">Wall3 Color:</label>
+            <jsuites-color id="wall3Color" value="#9f9f9f" style="grid-column: 4;"></jsuites-color>
+            
+            <label for="wall4Color" style="grid-column: 5;">Wall4 Color:</label>
+            <jsuites-color id="wall4Color" value="#9f9f9f" style="grid-column: 6;"></jsuites-color>
+
+            <button type="button" id="selectMode" style=" grid-column: 1 / -1; border-radius: 1rem; box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.2); padding: 2px;">SELECT SEGMENT</button>
+
+            <button type="button" id="removeButton" style="grid-column: 1 / -1; border-radius: 1rem; box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.2); padding: 2px;">REMOVE</button>
+        </div>
+
+        <div id="furnituresContainer" style="display: block; grid-column: 4; position: relative; top: 1rem; right: 1rem; background-color: rgba(255, 255, 255, 0.8); padding: 0.5rem; border-radius: 0.5rem; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+            <canvas id="furnituresCanvas"></canvas>
         </div>
     </div>
-    <!-- <canvas id="myCanvas"></canvas> -->
-    
-    
-    
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://jsuites.net/v5/jsuites.js"></script>
-    <script src="https://jsuites.net/v5/jsuites.webcomponents.js"></script>
-    <link rel="stylesheet" href="https://jsuites.net/v5/jsuites.css" type="text/css" />
     <script>
-        const STATIC_URL = "{% static 'assets3d/' %}";
-    </script>
-    <script>
-        // Toggle visibility of form 1 when its hamburger icon is clicked
-        document.getElementById('toggleForm1').addEventListener('click', function() {
-            const form1 = document.getElementById('form1');
-            form1.style.display = (form1.style.display === 'none') ? 'grid' : 'none';
-            const form2 = document.getElementById('furnituresContainer');
-            form2.style.display = (form2.style.display === 'none') ? 'block' : 'none';
-        });
-    </script>
-    <script type="module">
-        document.querySelector('.outer').addEventListener('click', (e) => {
-            e.preventDefault();
-        });
-        document.querySelectorAll('a').forEach((elem) => {
-            elem.addEventListener('click', ()=>{window.location.href = "{% url 'index' %}";});
-        });
-        document.getElementById('widthInput').addEventListener('change', updateRoomSize, false);
-        document.getElementById('heightInput').addEventListener('change', updateRoomSize, false);
-        document.getElementById('depthInput').addEventListener('change', updateRoomSize, false);
-        
-        document.getElementById('objectPositionX').addEventListener('change', updateObjectPosition, false);
-        document.getElementById('objectPositionY').addEventListener('change', updateObjectPosition, false);
-        document.getElementById('objectPositionZ').addEventListener('change', updateObjectPosition, false);
-        
-        document.getElementById('objectRotationZ').addEventListener('change', updateObjectRotation, false);
-        
-        document.querySelectorAll('jsuites-color').forEach((elem)=>{elem.addEventListener('onchange', function(e) {
-            // Set the font color
-            e.target.children[0].style.color = this.value;
-            // Show on console
-            console.log('New value:' + this.value);
-            updateRoomColor();
-        });})
-        // document.getElementById('ceilingColor').addEventListener('change', updateRoomColor, false);
-        // document.getElementById('floorColor').addEventListener('change', updateRoomColor, false);
-        // document.getElementById('wall1Color').addEventListener('change', updateRoomColor, false);
-        // document.getElementById('wall2Color').addEventListener('change', updateRoomColor, false);
-        // document.getElementById('wall3Color').addEventListener('change', updateRoomColor, false);
-        // document.getElementById('wall4Color').addEventListener('change', updateRoomColor, false);
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const form = document.getElementById('form1');
+            const toggleForm = document.getElementById('toggleForm1');
+            const canvas = document.getElementById('furnituresCanvas');
+            const selectModeButton = document.getElementById('selectMode');
+            const removeButton = document.getElementById('removeButton');
 
-        document.getElementById('removeButton').addEventListener('click', removeFurniture, false);
-
-        document.getElementById('selectMode').addEventListener('click', toggleMode, false);
-
-        let selectModes = [ "SELECT ENTIRE", "SELECT SEGMENT"];
-        let selectMode = 0;
-
-        function toggleMode() {
-            document.getElementById('selectMode').innerHTML = selectModes[selectMode];
-            selectMode = (selectMode + 1) % 2;
-            // console.log(selectModes[selectMode]);
-            setInputFields();
-            // console.log(clickedObject.position.x + " " + clickedObject.position.y + " " + clickedObject.position.z + " " + clickedObject.rotation.z)
-        }
-
-        function setInputFields() {
-            if (object && selectMode === 1) {
-                document.getElementById('objectPositionX').value = object.position.x*5;
-                document.getElementById('objectPositionY').value = object.position.y*5;
-                document.getElementById('objectPositionZ').value = object.position.z*5;
-                document.getElementById('objectRotationZ').value = object.rotation.z;
-            }
-            if (clickedObject && selectMode === 0) {
-                document.getElementById('objectPositionX').value = clickedObject.position.x/5;
-                document.getElementById('objectPositionY').value = -clickedObject.position.z/5;
-                document.getElementById('objectPositionZ').value = clickedObject.position.y/5;
-                document.getElementById('objectRotationZ').value = clickedObject.rotation.z;
-            }
-        }
-
-
-        // Set up the scene, camera, and renderer
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.001, 1000);
-        // const renderer = new THREE.WebGLRenderer();
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0xffffff); // Set background color to white
-        // renderer.shadowMap.enabled = true; // Enable shadows
-        document.body.appendChild(renderer.domElement);
-
-        // Set light
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-        scene.add(ambientLight);
-
-        const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight1.position.set(-3, -1, -3);
-        directionalLight1.castShadow = true; // Enable shadow casting
-        scene.add(directionalLight1);
-        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight2.position.set(3, 1, 3);
-        directionalLight2.castShadow = true; // Enable shadow casting
-        scene.add(directionalLight2);
-        const directionalLight3 = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight3.position.set(1, 3, 1);
-        directionalLight3.castShadow = true; // Enable shadow casting
-        scene.add(directionalLight3);
-        const directionalLight4 = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight4.position.set(-1, -3, -1);
-        directionalLight4.castShadow = true; // Enable shadow casting
-        scene.add(directionalLight4);
-
-        
-        // Function to handle window resize
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        // Add event listener for window resize
-        window.addEventListener('resize', onWindowResize);
-
-        // Call onWindowResize initially to set up renderer size
-        onWindowResize();
-
-        // Create initial room
-        let roomWidth = 5.5;
-        let roomHeight = 4;
-        let roomDepth = 5;
-        let targetRotationX = 0;
-        let rotationSpeed = 0.1;
-        createRoom();
-
-        // Create a cube
-        // const cubeGeometry = new THREE.BoxGeometry();
-        // const cubeMaterial = new THREE.MeshPhongMaterial( { color: 0xaaffaa, specular: 0x101010 } ); // Use MeshPhongMaterial for better lighting
-        // const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        // cube.castShadow = true; // Enable shadow casting
-        // scene.add(cube);
-
-        let furnitures = {
-            'sofa1': "sofa",
-            'table1': "table",
-            'chair1': "chair",
-            'chair2': "chair",
-            'room1' : "room",
-            'table2': "table"
-        };
-
-        // Select the container element
-        const container = document.getElementById('furnituresContainer');
-
-        for (let furniture in furnitures) {
-            // Create a closure to capture the value of 'furniture' in each iteration
-            (function(furniture) {
-                const div = document.createElement('div');
-                div.innerHTML = furniture;
-                div.style.width = '60px';
-                div.style.height = '20px';
-                div.style.background = 'url(/static/assets_img/' + furniture + '.png) no-repeat';
-                div.style.backgroundSize = '60px 20px';
-                div.style.cursor = 'pointer';
-
-                // Add event listener for click
-                div.addEventListener('click', function() {
-                    loadFurniture(furniture);
-                });
-
-                // Append the created div to the container
-                container.appendChild(div);
-            })(furniture);
-        }
-
-        // Add product object to an array for easier access
-        // Add product object to an array for easier access
-        let object = null;
-        let clickedObject = null;
-        let loadedObjects = [];
-        const room = scene.getObjectByName('room');
-
-        // Load furniture
-        function loadFurniture(furniture) {
-            const loader = new THREE.GLTFLoader();
-            loader.load('/static/assets3d/' + furniture + '.glb', glb => {
-                const loadedProduct = glb.scene;
-                // Calculate the position of the base of the room
-                const roomBasePositionY = room.position.y - (roomHeight / 2); // Assuming room is centered at origin
-
-                // Set the position of the loaded model at the base of the room
-                loadedProduct.position.set(0, roomBasePositionY, 0); // Adjust as needed
-                console.log(loadedProduct.position);
-                console.log(roomBasePositionY);
-                loadedProduct.castShadow = true;
-                loadedProduct.name = furniture;
-                loadedObjects.push(loadedProduct);
-
-                // object = loadedProduct; // Assigning the loaded product to the global variable
-                // clickedObject = loadedProduct; // Get the object by its name
-                setInputFields();
-                scene.add(loadedProduct);
-                // console.log("loadedObjects[0].name " + loadedObjects[0].name);
-                // console.log("object.name " + object.name);
-
-                // Add event listener to the renderer's DOM element
-                renderer.domElement.addEventListener('click', function(event) {
-                    // Calculate mouse position in normalized device coordinates
-                    const mouse = {
-                        x: (event.clientX / window.innerWidth) * 2 - 1,
-                        y: -(event.clientY / window.innerHeight) * 2 + 1
-                    };
-
-                    // Raycasting to check if the mouse intersects with the clicked object
-                    const raycaster = new THREE.Raycaster();
-                    raycaster.setFromCamera(mouse, camera);
-
-                    // Check for intersections
-                    const intersects = raycaster.intersectObjects(loadedObjects, true);
-
-                    if (intersects.length > 0) {
-                        // console.log(furniture + ' clicked!');
-                        object = intersects[0].object;
-                        // console.log("object.name " + object.name);
-                        clickedObject = scene.getObjectByName(object.name).parent.parent;
-                        setInputFields();
-                        console.log(clickedObject.position);
-                        // document.getElementById('objectPositionX').value = clickedObject.position.x;
-                        // document.getElementById('objectPositionY').value = clickedObject.position.y;
-                        // document.getElementById('objectPositionZ').value = clickedObject.position.z;
-                        // document.getElementById('objectRotationZ').value = clickedObject.rotation.z;
-                    }
-                    // if (clickedObject) {
-                    // }
-                });
+            // Toggle form visibility
+            toggleForm.addEventListener('click', () => {
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
             });
-        }
 
+            // Initialize three.js scene
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas });
+            renderer.setSize(window.innerWidth, window.innerHeight);
 
-        function removeFurniture() {
-            // console.log('clickedObject: ' + clickedObject);
-            if (clickedObject && selectMode === 0) {
-                // console.log('clickedObject removed: ' + clickedObject);
-                clickedObject.parent.remove( clickedObject );
-                clickedObject = null;
-            }
-            else if (object && selectMode === 1) {
-                // console.log('object removed: ' + object);
-                object.parent.remove( object );
-                object = null;
-            }
-        }
+            // Add lights to the scene
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
 
-        // Position the camera inside the room
-        camera.position.set(0, 0, 0);
-        camera.lookAt(0, 0, 1);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(0, 1, 0);
+            scene.add(directionalLight);
 
-        // rotate camera on mouse movement
-        document.addEventListener('mousemove', onMouseMove);
+            // Define materials for walls, ceiling, and floor
+            const wallMaterial = new THREE.MeshBasicMaterial({ color: 0x9f9f9f, side: THREE.DoubleSide });
+            const ceilingMaterial = new THREE.MeshBasicMaterial({ color: 0x9f9f9f, side: THREE.DoubleSide });
+            const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x9f9f9f, side: THREE.DoubleSide });
 
-        function onMouseMove(event) {
-            const canvasRect = renderer.domElement.getBoundingClientRect();
-            const mouseX = ((event.clientX - canvasRect.left) / renderer.domElement.clientWidth) * 2 - 1;
-            const mouseY = -((event.clientY - canvasRect.top) / renderer.domElement.clientHeight) * 2 + 1;
-
-            if (mouseY < 0.3) {
-                if (mouseX > 0.3 ) {
-                    targetRotationX = (mouseX-0.3) * Math.PI * rotationSpeed;
-                }
-                else if (mouseX < -0.3) {
-                    targetRotationX = (mouseX+0.3) * Math.PI * rotationSpeed;
-                }
-                else {
-                    targetRotationX = 0;
-                }
-            }
-            else {
-                targetRotationX = 0;
-            }
-        }
-
-        document.addEventListener('keydown', onKeyDown);
-
-        function onKeyDown(event) {
-            if (event.code === 'ArrowUp') {
-                moveCameraForward(1);
-            }
-
-            if (event.code === 'ArrowDown') {
-                moveCameraForward(-1);
-            }
-
-            if (event.code === 'ArrowLeft') {
-                moveCameraRight(-1);
-            }
-
-            if (event.code === 'ArrowRight') {
-                moveCameraRight(1);
-            }
-        }
-
-        function moveCameraForward( direction ) {
-            let i = 0;
-            function animate() {
-                if (i < 10) {
-                    if ( camera.position.x - direction * 0.3 * Math.sin(camera.rotation.y) > -roomWidth / 2 && camera.position.x  - direction * 0.3 * Math.sin(camera.rotation.y)< roomWidth / 2) {
-                        camera.position.x -= direction * 0.05 * Math.sin(camera.rotation.y);
-                    }
-                    if ( camera.position.z + direction * 0.3 * Math.cos(camera.rotation.y) < roomDepth / 2 && camera.position.z + direction * 0.3 * Math.cos(camera.rotation.y) > -roomDepth / 2) {
-                        camera.position.z += direction * 0.05 * Math.cos(camera.rotation.y);
-                    }
-                    i++;
-                    requestAnimationFrame(animate);
-                }
-            }
-            animate();
-        }
-
-        function moveCameraRight ( direction ) {
-            let i = 0;
-            function animate() {
-                if (i < 10) {
-                    if ( camera.position.x - direction * 0.3 * Math.cos(camera.rotation.y) > -roomWidth / 2 && camera.position.x - direction * 0.3 * Math.cos(camera.rotation.y) < roomWidth / 2) {
-                        camera.position.x -= direction * 0.05 * Math.cos(camera.rotation.y);
-                    }
-                    if ( camera.position.z + direction * 0.3 * Math.sin(-camera.rotation.y) < roomDepth / 2 && camera.position.z + direction * 0.3 * Math.sin(-camera.rotation.y) > -roomDepth / 2) {
-                        camera.position.z += direction * 0.05 * Math.sin(-camera.rotation.y);
-                    }
-                    i++;
-                    requestAnimationFrame(animate);
-                }
-            }
-            animate();
-        }
-
-        // Function to update room size
-        function updateRoomSize() {
-            roomWidth = parseFloat(document.getElementById('widthInput').value);
-            roomHeight = parseFloat(document.getElementById('heightInput').value);
-            roomDepth = parseFloat(document.getElementById('depthInput').value);
-            createRoom();
-        }
-
-        function updateRoomColor() {
-            // Get the color values from the input fields
-            console.log(document.getElementById('ceilingColor').value);
-            const ceilingColor = document.getElementById('ceilingColor').value;
-            const floorColor = document.getElementById('floorColor').value;
-            const wall1Color = document.getElementById('wall1Color').value;
-            const wall2Color = document.getElementById('wall2Color').value;
-            const wall3Color = document.getElementById('wall3Color').value;
-            const wall4Color = document.getElementById('wall4Color').value;
-
-            // Update the colors of the room's walls
-            const materials = [
-                new THREE.MeshPhongMaterial({ color: parseInt(wall1Color.replace('#', '0x')), side: THREE.BackSide }), // Wall 1
-                new THREE.MeshPhongMaterial({ color: parseInt(wall2Color.replace('#', '0x')), side: THREE.BackSide }), // Wall 2
-                new THREE.MeshPhongMaterial({ color: parseInt(ceilingColor.replace('#', '0x')), side: THREE.BackSide }), // Ceiling
-                new THREE.MeshPhongMaterial({ color: parseInt(floorColor.replace('#', '0x')), side: THREE.BackSide }), // Floor
-                new THREE.MeshPhongMaterial({ color: parseInt(wall3Color.replace('#', '0x')), side: THREE.BackSide }), // Wall 3
-                new THREE.MeshPhongMaterial({ color: parseInt(wall4Color.replace('#', '0x')), side: THREE.BackSide }), // Wall 4
-            ];
-
-            const room = scene.getObjectByName('room');
-            room.material = materials;
-            console.log(room.material)
-            console.log(materials)
-        }
-
-
-        function updateObjectPosition() {
-            // console.log(object);
-            if (object && selectMode === 1) {
-                object.position.set(
-                    parseFloat(document.getElementById('objectPositionX').value/5),
-                    parseFloat(document.getElementById('objectPositionY').value/5),
-                    parseFloat(document.getElementById('objectPositionZ').value/5)
-                );
-            }
-            if (clickedObject && selectMode === 0) {
-                clickedObject.position.set(
-                    parseFloat(document.getElementById('objectPositionX').value*5),
-                    parseFloat(document.getElementById('objectPositionZ').value*5),
-                    parseFloat(-document.getElementById('objectPositionY').value*5)
-                );
-            }
-        }
-
-        function updateObjectRotation() {
-            if (object && selectMode === 1) {
-                object.rotation.set(0,0,
-                    parseFloat(document.getElementById('objectRotationZ').value/5)
-                );
-            }
-            if (clickedObject && selectMode === 0) {
-                clickedObject.rotation.set(0,
-                    parseFloat(document.getElementById('objectRotationZ').value/5)
-                ,0);
-            }
-        }
-
-        // Function to create room
-        // Function to create room
-        function createRoom() {
-            // Clear previous room
-            scene.remove(scene.getObjectByName('room'));
-
-            // Define different colors for each wall
-            const wallColors = [
-                0x9f9f9f, // Red color for the front wall
-                0x9f9f9f, // Green color for the back wall
-                0x9f9f9f, // Blue color for the left wall
-                0x9f9f9f, // Yellow color for the right wall
-                0x9f9f9f, // Magenta color for the top wall
-                0x9f9f9f  // Cyan color for the bottom wall
-            ];
-
-            // Create materials for each wall
-            const materials = wallColors.map(color => new THREE.MeshPhongMaterial({ color: color, side: THREE.BackSide }));
-
-            // Create a new room
+            // Draw room
+            const roomWidth = 5.5;
+            const roomHeight = 4;
+            const roomDepth = 5;
             const roomGeometry = new THREE.BoxGeometry(roomWidth, roomHeight, roomDepth);
-            const roomMaterial = materials;
-            
-            const room = new THREE.Mesh(roomGeometry, roomMaterial);
-            room.receiveShadow = true; // Enable shadow receiving
-            room.name = 'room';
-            scene.add(room);
-        }
 
+            const roomCeiling = new THREE.Mesh(roomGeometry, ceilingMaterial);
+            roomCeiling.position.set(0, roomHeight / 2, 0);
+            scene.add(roomCeiling);
 
-        // // Function to create and add a new cube
-        // function addCube() {
-        //     const newCube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        //     newCube.position.x = Math.random() * 8 - 4;
-        //     newCube.position.y = Math.random() * 8 - 4;
-        //     newCube.position.z = Math.random() * 8 - 4;
-        //     newCube.castShadow = true; // Enable shadow casting for the new cube
-        //     scene.add(newCube);
-        // }
+            const roomFloor = new THREE.Mesh(roomGeometry, floorMaterial);
+            roomFloor.position.set(0, -roomHeight / 2, 0);
+            scene.add(roomFloor);
 
-        // Function to animate the cube
-        function animate() {
-            requestAnimationFrame(animate);
-            camera.rotation.y += 0.1 * targetRotationX;
-            updateObjectPosition();
-            updateObjectRotation();
-            // updateRoomSize();  for some reason it is not letting the colors of the room change
-            renderer.render(scene, camera);
-        }
+            const roomWall1 = new THREE.Mesh(new THREE.PlaneGeometry(roomWidth, roomHeight), wallMaterial);
+            roomWall1.position.set(0, 0, -roomDepth / 2);
+            roomWall1.rotation.x = Math.PI / 2;
+            scene.add(roomWall1);
 
-        animate();
-        // Raycasting to detect sofa click
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
+            const roomWall2 = new THREE.Mesh(new THREE.PlaneGeometry(roomWidth, roomHeight), wallMaterial);
+            roomWall2.position.set(0, 0, roomDepth / 2);
+            roomWall2.rotation.x = -Math.PI / 2;
+            scene.add(roomWall2);
 
-        function onMouseClick(event) {
-            event.preventDefault();
+            const roomWall3 = new THREE.Mesh(new THREE.PlaneGeometry(roomDepth, roomHeight), wallMaterial);
+            roomWall3.position.set(-roomWidth / 2, 0, 0);
+            roomWall3.rotation.y = -Math.PI / 2;
+            scene.add(roomWall3);
 
-            // Calculate mouse position in normalized device coordinates
-            // (-1 to +1) for both components
-            mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-            mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+            const roomWall4 = new THREE.Mesh(new THREE.PlaneGeometry(roomDepth, roomHeight), wallMaterial);
+            roomWall4.position.set(roomWidth / 2, 0, 0);
+            roomWall4.rotation.y = Math.PI / 2;
+            scene.add(roomWall4);
 
-            // Update the picking ray with the camera and mouse position
-            raycaster.setFromCamera(mouse, camera);
+            camera.position.z = 5;
 
-            // Calculate objects intersecting the picking ray
-            const intersects = raycaster.intersectObjects(scene.children, true);
-
-            // Log if a sofa is clicked
-            for (let i = 0; i < intersects.length; i++) {
-                if (intersects[i].object.userData.isSofa) {
-                    // console.log('Sofa clicked!');
-                    // Add your logic here for moving or rotating the sofa
-                    break;
-                }
+            // Render function
+            function render() {
+                requestAnimationFrame(render);
+                renderer.render(scene, camera);
             }
-        }
-
-        document.addEventListener('click', onMouseClick, false);
+            render();
+        });
     </script>
 </body>
 </html>
+
