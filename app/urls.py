@@ -4,8 +4,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 from . import views
 
-from django.views.generic.base import TemplateView
-
 urlpatterns = [
     path('', views.home, name='index'),
     path('home/<int:product_id>/', views.products_detail, name='product_detail'),
@@ -41,8 +39,7 @@ urlpatterns = [
     path('dashboard/rent/all/rented-products/return/', views.return_product, name='return_product'),
     path('dashboard/rent/all/', views.activity, name='all_rent'),
     path('home/virtual/', views.virtual, name='virtual'),
-    path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),),
-    
+
 ]
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

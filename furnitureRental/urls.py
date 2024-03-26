@@ -15,13 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+<<<<<<< Updated upstream
 from django.views.generic.base import RedirectView
-from django.contrib.staticfiles.storage import staticfiles_storage
+=======
+
+>>>>>>> Stashed changes
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('', include('app.urls')),
-    path('favicon.png', RedirectView.as_view(url=staticfiles_storage.url('images/favicon.png')))
+<<<<<<< Updated upstream
+    path('favicon.png', RedirectView.as_view(url=static('images/favicon.png')))
 ]
+=======
+>>>>>>> Stashed changes
 
+]
