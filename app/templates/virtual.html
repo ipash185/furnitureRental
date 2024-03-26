@@ -233,9 +233,9 @@
                 // Use device orientation data to update camera rotation
                 // In Three.js, you would typically use a camera object
                 // Assume camera is already defined in your scene
-                camera.rotation.x = beta * Math.PI / 180;   // Convert degrees to radians
-                camera.rotation.y = gamma * Math.PI / 180;  // Convert degrees to radians
-                camera.rotation.z = alpha * Math.PI / 180;  // Convert degrees to radians
+                camera.rotation.x += beta * Math.PI / 180;   // Convert degrees to radians
+                camera.rotation.y += gamma * Math.PI / 180;  // Convert degrees to radians
+                camera.rotation.z += alpha * Math.PI / 180;  // Convert degrees to radians
 
                 // Optionally, you might want to limit the range of rotation
                 // For example:
