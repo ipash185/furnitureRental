@@ -130,10 +130,11 @@
     <input type="text" id="camerarotz" value="0" style="position: fixed; bottom: 120px; left: 20px;"> -->
 
     <!-- vr button at the bottom center-->
-    <div id="vrText" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 10px 20px; background-color: #3a455021; color: #ffffffa2; border-radius: 5px; font-size: smaller; width: 30vw; display: none">
+    <div id="vrText" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 10px 20px; background-color: #3a455021; color: #ffffffa2; border-radius: 5px; font-size: smaller; width: 20vw; display: block; text-align: center;">
         Keep your device horizontal and slightly tilted upwards
     </div>
-    <button id="arvrButton" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">AR/VR</button>
+    <button id="turnAround" style="position: fixed; bottom: 20px; left: 20px; padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; display: none;">Turn Around</button>
+    <button id="arvrButton" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Enter VR</button>
     <!-- <canvas id="myCanvas"></canvas> -->
     
     
@@ -196,9 +197,38 @@
         var newCamRotX = 0;
         var newCamRotY = 0;
         var newCamRotZ = 0;
+        var oldCamRotX = 0;
+        var oldCamRotY = 0;
+        var oldCamRotZ = 0;
         var isVRMode = false;
+        var isTurned = false;
+        var dir = 1;
+        var dirAdd = 0;
         // Check if DeviceOrientationEvent is supported
         if (window.DeviceOrientationEvent && window.innerWidth < 1024) {
+
+            document.getElementById('turnAround').addEventListener('click', toggleTurn, false);
+
+            function toggleTurn() {
+                isTurned = !isTurned;
+                if (isTurned) {
+                    turnAround();
+                }
+                else {
+                    turnBack();
+                }
+            }
+
+            function turnAround() {
+                dir = -1;
+                dirAdd = Math.PI;
+            }
+
+            function turnBack() {
+                dir = 1;
+                dirAdd = 0;
+            }
+
             // Variable to keep track of current mode
 
             // Function to toggle AR/VR mode
@@ -220,13 +250,33 @@
 
                 // For demonstration purposes, let's just log a message
                 console.log('Entered VR mode');
+                
+                if ((camera.rotation.y < -Math.PI / 5 && camera.rotation.y >= -Math.PI / 2) || (camera.rotation.y > Math.PI / 5 && camera.rotation.y <= Math.PI / 2)) {
+                    camera.rotation.y = 0;
+                }
+                else if ((camera.rotation.y > -4*Math.PI / 5 && camera.rotation.y < -Math.PI / 2) || (camera.rotation.y < 4*Math.PI / 5 && camera.rotation.y > Math.PI / 2)) {
+                    camera.rotation.y = 0;
+                        toggleTurn();
+                }
+                if (camera.rotation.y > 4*Math.PI / 5 || camera.rotation.y < -4*Math.PI / 5) {
+                    camera.rotation.y -= Math.PI;
+                    if (!isTurned) {
+                        toggleTurn();
+                    }
+                }
+
+                oldCamRotX = camera.rotation.x;
+                oldCamRotY = camera.rotation.y;
+                oldCamRotZ = camera.rotation.z;
 
                 // Listen for device orientation changes and update camera rotation
                 window.addEventListener('deviceorientation', updateCameraRotation, false);
-                document.getElementById('vrText').style.display = 'block';
-                camera.position.set(0, 0, -1);
-                camera.rotation.set(-Math.PI, 0, Math.PI);
-                camera.lookAt(0, 0, 0);
+                document.getElementById('vrText').style.display = 'none';
+                document.getElementById('turnAround').style.display = 'block';
+                document.getElementById('arvrButton').innerHTML = 'Exit VR';
+                camera.position.set(camera.position.x, camera.position.y, camera.position.z);
+                camera.rotation.set(oldCamRotX, oldCamRotY, oldCamRotZ);
+                // camera.lookAt(0, 0, 0);
             }
 
             // Function to exit VR mode
@@ -235,7 +285,11 @@
                 // For example, disable VR rendering, reset camera settings, etc.
 
                 // For demonstration purposes, let's just log a message
-                document.getElementById('vrText').style.display = 'none';
+                document.getElementById('vrText').style.display = 'block';
+                document.getElementById('turnAround').style.display = 'none';
+                document.getElementById('arvrButton').innerHTML = 'Enter VR';
+                turnBack();
+                isTurned = false;
                 console.log('Exited VR mode');
 
                 // Remove device orientation listener
@@ -255,9 +309,9 @@
                 // Use device orientation data to update camera rotation
                 // In Three.js, you would typically use a camera object
                 // Assume camera is already defined in your scene
-                newCamRotX = -(beta * Math.PI / 180 + Math.PI).toFixed(2);   // Convert degrees to radians
-                newCamRotY =  -(gamma * Math.PI / 180).toFixed(2);  // Convert degrees to radians
-                newCamRotZ = (alpha * Math.PI / 180 -5*Math.PI/2).toFixed(2);  // Convert degrees to radians
+                newCamRotX =  dir*(oldCamRotX-(beta * Math.PI / 180).toFixed(2));   // Convert degrees to radians
+                newCamRotY = dirAdd + (oldCamRotY-(gamma * Math.PI / 180).toFixed(2));  // Convert degrees to radians
+                newCamRotZ = ((alpha * Math.PI / 180 -5*Math.PI/2).toFixed(2));  // Convert degrees to radians
 
                 // Optionally, you might want to limit the range of rotation
                 // For example:
