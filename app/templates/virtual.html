@@ -122,7 +122,17 @@
             <!-- Content goes here -->
         </div>
     </div>
+    <!-- <input type="text" id="alpha" value="0" style="position: fixed; bottom: 20px; left: 20px;">
+    <input type="text" id="beta" value="0" style="position: fixed; bottom: 40px; left: 20px;">
+    <input type="text" id="gamma" value="0" style="position: fixed; bottom: 60px; left: 20px;">
+    <input type="text" id="camerarotx" value="0" style="position: fixed; bottom: 80px; left: 20px;">
+    <input type="text" id="cameraroty" value="0" style="position: fixed; bottom: 100px; left: 20px;">
+    <input type="text" id="camerarotz" value="0" style="position: fixed; bottom: 120px; left: 20px;"> -->
+
     <!-- vr button at the bottom center-->
+    <div id="vrText" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 10px 20px; background-color: #3a455021; color: #ffffffa2; border-radius: 5px; font-size: smaller; width: 30vw">
+        Keep your device horizontal and slightly tilted upwards
+    </div>
     <button id="arvrButton" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">AR/VR</button>
     <!-- <canvas id="myCanvas"></canvas> -->
     
@@ -180,10 +190,16 @@
         document.getElementById('removeButton').addEventListener('click', removeFurniture, false);
 
         document.getElementById('selectMode').addEventListener('click', toggleMode, false);
+        var alpha;
+        var beta;
+        var gamma;
+        var newCamRotX = 0;
+        var newCamRotY = 0;
+        var newCamRotZ = 0;
+        var isVRMode = false;
         // Check if DeviceOrientationEvent is supported
-        if (window.DeviceOrientationEvent) {
+        if (window.DeviceOrientationEvent && window.innerWidth < 1024) {
             // Variable to keep track of current mode
-            var isVRMode = false;
 
             // Function to toggle AR/VR mode
             function toggleARVR() {
@@ -207,6 +223,9 @@
 
                 // Listen for device orientation changes and update camera rotation
                 window.addEventListener('deviceorientation', updateCameraRotation, false);
+                camera.position.set(0, 0, -1);
+                camera.rotation.set(-Math.PI, 0, Math.PI);
+                camera.lookAt(0, 0, 0);
             }
 
             // Function to exit VR mode
@@ -220,22 +239,23 @@
                 // Remove device orientation listener
                 window.removeEventListener('deviceorientation', updateCameraRotation, false);
                 camera.position.set(0, 0, -1);
-                camera.rotation.set(0, 0, 0);
+                camera.rotation.set(-Math.PI, 0, Math.PI);
+                camera.lookAt(0, 0, 0);
             }
 
             // Function to update camera rotation based on device orientation
             function updateCameraRotation(event) {
                 // Extract device orientation data
-                var alpha = event.alpha; // rotation around z-axis
-                var beta = event.beta;   // rotation around x-axis
-                var gamma = event.gamma; // rotation around y-axis
+                alpha = event.alpha; // rotation around z-axis
+                beta = event.beta;   // rotation around x-axis
+                gamma = event.gamma; // rotation around y-axis
 
                 // Use device orientation data to update camera rotation
                 // In Three.js, you would typically use a camera object
                 // Assume camera is already defined in your scene
-                camera.rotation.x = gamma * Math.PI / 180;   // Convert degrees to radians
-                camera.rotation.y = alpha * Math.PI / 180;  // Convert degrees to radians
-                camera.rotation.z = beta * Math.PI / 180;  // Convert degrees to radians
+                newCamRotX = -(beta * Math.PI / 180 + Math.PI).toFixed(2);   // Convert degrees to radians
+                newCamRotY =  -(gamma * Math.PI / 180).toFixed(2);  // Convert degrees to radians
+                newCamRotZ = (alpha * Math.PI / 180 -5*Math.PI/2).toFixed(2);  // Convert degrees to radians
 
                 // Optionally, you might want to limit the range of rotation
                 // For example:
@@ -525,19 +545,19 @@
                 // Horizontal swipe
                 if (swipeLengthX > 1) {
                     // Swipe right
-                    moveCameraRight(1);
+                    moveCameraRight(-1);
                 } else if (swipeLengthX < -1) {
                     // Swipe left
-                    moveCameraRight(-1);
+                    moveCameraRight(1);
                 }
             } else {
                 // Vertical swipe
                 if (swipeLengthY > 1) {
                     // Swipe down
-                    moveCameraForward(-1);
+                    moveCameraForward(1);
                 } else if (swipeLengthY < -1) {
                     // Swipe up
-                    moveCameraForward(1);
+                    moveCameraForward(-1);
                 }
             }
         }
@@ -689,6 +709,23 @@
             camera.rotation.y += 0.1 * targetRotationX;
             updateObjectPosition();
             updateObjectRotation();
+            if (isVRMode) {
+                if (newCamRotX !== camera.rotation.x) {
+                    camera.rotation.x += (newCamRotX - camera.rotation.x)/10;
+                }
+                if (newCamRotY !== camera.rotation.y) {
+                    camera.rotation.y += (newCamRotY - camera.rotation.y)/10;
+                }
+                if (newCamRotZ !== camera.rotation.z) {
+                    camera.rotation.z += (newCamRotZ - camera.rotation.z)/10;
+                }
+            }
+            // document.getElementById('alpha').value = alpha;
+            // document.getElementById('beta').value = beta;
+            // document.getElementById('gamma').value = gamma;
+            // document.getElementById('camerarotx').value = camera.rotation.x;
+            // document.getElementById('cameraroty').value = camera.rotation.y;
+            // document.getElementById('camerarotz').value = camera.rotation.z;
             // updateRoomSize();  for some reason it is not letting the colors of the room change
             renderer.render(scene, camera);
         }
