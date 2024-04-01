@@ -19,8 +19,8 @@ class Product(models.Model):
     category = models.CharField(max_length=10, choices=Categories.choices, default=Categories.none)
     image = models.ImageField(upload_to='product_image/%y/%m/%d', null=False, blank=False)
     available = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True, default= None)
-    updated_at = models.DateTimeField(auto_now=True, default= None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     duration = models.IntegerField(default=0)
 
     def __str__(self):
