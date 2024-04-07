@@ -4,7 +4,7 @@ from django.urls import reverse, URLPattern
 from app.urls import urlpatterns
 
 
-class MyAppUrlsTest(test.SimpleTestCase):
+class MyAppUrlsTest(test.TestCase):
 
     def test_responses(self):
         for url in urlpatterns:
