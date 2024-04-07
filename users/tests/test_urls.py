@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from django.contrib.auth import views as auth_views
-from . import views
+from .. import views
 
 class TestUrls(TestCase):
 
@@ -17,11 +17,12 @@ class TestUrls(TestCase):
         url = reverse('register')
         self.assertEqual(resolve(url).func, views.register)
 
-    def test_accounts_url_resolves(self):
-        url = reverse('login')  # Assuming login URL
+    def test_login_url_resolves(self):
+        url = reverse('login')
         self.assertEqual(resolve(url).func.view_class, auth_views.LoginView)
 
-        url = reverse('logout')  # Assuming logout URL
+    def test_logout_url_resolves(self):
+        url = reverse('logout')
         self.assertEqual(resolve(url).func.view_class, auth_views.LogoutView)
 
     def test_profile_url_resolves(self):

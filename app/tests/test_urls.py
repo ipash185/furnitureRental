@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from . import views
+from .. import views
 
 # Create your tests here.
 
@@ -75,11 +75,11 @@ class TestUrls(TestCase):
         self.assertEqual(resolve(url).func, views.pending_rent_requests)
 
     def test_accepted_rent_request_url_resolves(self):
-        url = reverse('accepted_rent_requests', args=[1])
+        url = reverse('accepted_rent_requests', args=[1])   # Assuming rent_id is 1
         self.assertEqual(resolve(url).func, views.accept_rent_request)
 
     def test_rejected_rent_request_url_resolves(self):
-        url = reverse('rejected_rent_requests', args=[1])
+        url = reverse('rejected_rent_requests', args=[1])   # Assuming rent_id is 1
         self.assertEqual(resolve(url).func, views.reject_rent_request)
 
     def test_delivery_rented_products_url_resolves(self):
@@ -87,7 +87,7 @@ class TestUrls(TestCase):
         self.assertEqual(resolve(url).func, views.delivery_rented_products)
 
     def test_delivered_rented_products_url_resolves(self):
-        url = reverse('delivered_rented_products', args=[1])
+        url = reverse('delivered_rented_products', args=[1])    # Assuming rent_id is 1
         self.assertEqual(resolve(url).func, views.delivered_rented_products)
 
     def test_rented_products_url_resolves(self):
@@ -95,7 +95,7 @@ class TestUrls(TestCase):
         self.assertEqual(resolve(url).func, views.rented_products)
 
     def test_accept_return_request_url_resolves(self):
-        url = reverse('accept_return_request', args=[1])
+        url = reverse('accept_return_request', args=[1])    # Assuming rent_id is 1
         self.assertEqual(resolve(url).func, views.accept_return_request)
 
     def test_all_rent_return_request_url_resolves(self):
@@ -113,7 +113,5 @@ class TestUrls(TestCase):
     def test_virtual_url_resolves(self):
         url = reverse('virtual')
         self.assertEqual(resolve(url).func, views.virtual)
-
-    # Add tests for other URLs following the same pattern
 
     # Add more tests for static and media URLs if needed
