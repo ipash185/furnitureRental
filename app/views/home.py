@@ -35,8 +35,8 @@ def alert_below_threshold(category):
 
         # Send an email with the notification message to the specified recipient email
 
-        YOUR_GOOGLE_EMAIL = 'ashu.anshul12@gmail.com'  # The email you setup to send the email using app password
-        YOUR_GOOGLE_EMAIL_APP_PASSWORD = 'acbvynsmlayocfba'  # The app password you generated
+        YOUR_GOOGLE_EMAIL = 'thefurniturerental.store@gmail.com'  # The email you setup to send the email using app password
+        YOUR_GOOGLE_EMAIL_APP_PASSWORD = 'rznticpsxkapxpsu'  # The app password you generated
 
         smtpserver = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         smtpserver.ehlo()
