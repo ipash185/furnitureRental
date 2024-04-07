@@ -1,7 +1,7 @@
 from django import test
 from django.urls import reverse, URLPattern
 
-from myapp.urls import urlpatterns
+from app.urls import urlpatterns
 
 
 class MyAppUrlsTest(test.SimpleTestCase):
