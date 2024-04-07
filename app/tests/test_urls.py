@@ -7,4 +7,4 @@ from app.urls import urlpatterns
 class MyAppUrlsTest(test.SimpleTestCase):
 
     def test_responses(self):
-        self.assertTrue(1==1)
+        self.assertTrue(1==2)
