@@ -29,9 +29,9 @@ SECRET_KEY = "123"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1","localhost", "furniturerental.store", "trailblazers.tail25c21.ts.net"]
+ALLOWED_HOSTS = ["127.0.0.1","localhost", "furniturerental.store"]
 
-CSRF_TRUSTED_ORIGINS = ["https://furniturerental.store", "https://trailblazers.tail25c21.ts.net"]
+CSRF_TRUSTED_ORIGINS = ["https://furniturerental.store"]
 
 
 # Application definition
@@ -155,4 +155,4 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "ashu.anshul12@gmail.com"
+EMAIL_HOST_USER = "thefurniturerental.store@gmail.com"

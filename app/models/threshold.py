@@ -8,10 +8,10 @@ class Threshold(models.Model):
     threshold_table = models.IntegerField(default=4)
     threshold_bed = models.IntegerField(default=4)
     
-    available_sofa = models.IntegerField(default=4)
-    available_chair = models.IntegerField(default=4)
-    available_table = models.IntegerField(default=4)
-    available_bed = models.IntegerField(default=4)
+    available_sofa = models.IntegerField(default=0)
+    available_chair = models.IntegerField(default=0)
+    available_table = models.IntegerField(default=0)
+    available_bed = models.IntegerField(default=0)
 
     def __str__(self):
         if self.available_sofa < self.threshold_sofa:
