@@ -216,9 +216,9 @@ def accept_return_request(request, rent_id):
     rent.is_returned = True
     
     time_used = max(1,int((date.today() - rent.start_date).days))
-    print(time_used)
+
     rent.product.duration += time_used
-    rent.total_price = rent.product.price * time_used
+    rent.total_price = rent.product.price * rent.rental_day
     
     if time_used > rent.rental_day:
         rent.total_price += (time_used - rent.rental_day) * rent.product.price * Decimal(1.1)
