@@ -215,7 +215,7 @@ def accept_return_request(request, rent_id):
     rent = Rent.objects.get(id=rent_id)
     rent.is_returned = True
     
-    time_used = int((date.today() - rent.start_date).days)
+    time_used = min(1,int((date.today() - rent.start_date).days))
     print(time_used)
     rent.product.duration += time_used
     rent.total_price = rent.product.price * time_used
