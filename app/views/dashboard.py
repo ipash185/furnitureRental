@@ -215,11 +215,14 @@ def accept_return_request(request, rent_id):
     rent = Rent.objects.get(id=rent_id)
     rent.is_returned = True
     
-    time_used = max(rent.rental_day, int((date.today() - rent.start_date).days))
+    time_used = int((date.today() - rent.start_date).days)
     
     rent.product.duration += time_used
     rent.total_price = rent.product.price * time_used
     
+    if time_used > rent.rental_day:
+        rent.total_price += (time_used - rent.rental_day) * rent.product.price * Decimal(1.1)
+        
     ref = Profit.objects.first()
     ref.revenue += rent.total_price
     ref.save()
